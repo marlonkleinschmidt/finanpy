@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block layout %}
+    {# A topbar vem antes da sidebar para que o Tab vá do botão ao menu aberto. O botão fica à direita para continuar visível com o menu aberto. #}
+    <header class="sticky top-0 z-40 flex items-center justify-between gap-3 bg-slate-900 border-b border-slate-800 px-4 py-3 lg:hidden">
+        {% include 'components/logo.html' %}
+        <button type="button" id="sidebar-toggle" aria-label="Abrir ou fechar o menu" aria-controls="sidebar" aria-expanded="false" class="cursor-pointer p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950">
+            <svg class="size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+            </svg>
+        </button>
+    </header>
+    {% include 'components/sidebar.html' %}
+    <div id="sidebar-overlay" aria-hidden="true" class="fixed inset-0 z-30 hidden bg-slate-950/70 lg:hidden"></div>
+    <div class="lg:pl-64">
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            {% block messages %}
+                {% if messages %}
+                    <div class="mb-6">
+                        {% include 'components/messages.html' %}
+                    </div>
+                {% endif %}
+            {% endblock %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/sidebar.js' %}" defer></script>
+{% endblock %}

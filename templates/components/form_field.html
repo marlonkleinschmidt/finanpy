@@ -1,0 +1,15 @@
+{# Recebe: field. O id dos blocos de erro e ajuda é o que o Django referencia em aria-describedby. #}
+<div>
+    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-slate-300 mb-1.5">{{ field.label }}</label>
+    {{ field }}
+    {% if field.errors %}
+        <div id="{{ field.auto_id }}_error">
+            {% for error in field.errors %}
+                <p class="mt-1 text-xs text-rose-400">{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if field.help_text %}
+        <div id="{{ field.auto_id }}_helptext" class="mt-1 text-xs text-slate-500">{{ field.help_text|safe }}</div>
+    {% endif %}
+</div>

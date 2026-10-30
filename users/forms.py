@@ -5,10 +5,11 @@ from django.contrib.auth.forms import (
     UsernameField,
 )
 
+from core.forms import StyledFormMixin
 from users.models import User
 
 
-class SignUpForm(UserCreationForm):
+class SignUpForm(StyledFormMixin, UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email')
@@ -31,7 +32,7 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].label = 'Confirmação de senha'
 
 
-class EmailAuthenticationForm(AuthenticationForm):
+class EmailAuthenticationForm(StyledFormMixin, AuthenticationForm):
     username = UsernameField(
         label='E-mail',
         widget=forms.EmailInput(attrs={'autofocus': True}),

@@ -1,0 +1,8 @@
+{# Recebe: form. Exibe os erros não vinculados a um campo. #}
+{% if form.non_field_errors %}
+    <div role="alert" class="rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 px-4 py-3 text-sm">
+        {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+{% endif %}

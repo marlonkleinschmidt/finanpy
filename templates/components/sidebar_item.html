@@ -1,0 +1,7 @@
+{# Recebe: label, href, icon_path e app_name ou url_name, usados para destacar o item ativo. #}
+<a href="{{ href }}"{% if app_name and request.resolver_match.app_name == app_name or url_name and request.resolver_match.url_name == url_name %} aria-current="page" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition bg-gradient-to-r from-violet-600/20 to-transparent text-white border-l-2 border-violet-500"{% else %} class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition text-slate-400 hover:text-white hover:bg-slate-800"{% endif %}>
+    <svg class="size-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="{{ icon_path }}"/>
+    </svg>
+    {{ label }}
+</a>

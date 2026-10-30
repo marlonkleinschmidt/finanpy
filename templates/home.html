@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Início | Finanpy{% endblock %}
+
+{% block navbar %}
+    {% include 'components/navbar_public.html' %}
+{% endblock %}
+
+{% block content %}
+    <main>
+        <section class="bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 text-center">
+                <h1 class="pb-2 text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-300 bg-clip-text text-transparent">Suas finanças sob controle</h1>
+                <p class="mt-6 max-w-2xl mx-auto text-sm md:text-base text-slate-300">Saiba quanto você tem, de onde vem e para onde vai cada real, sem a complexidade das planilhas.</p>
+                <div class="mt-8 flex flex-col sm:flex-row sm:justify-center gap-3">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-violet-900/30 hover:opacity-90">Ir para o dashboard</a>
+                    {% else %}
+                        <a href="{% url 'signup' %}" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-violet-900/30 hover:opacity-90">Cadastre-se</a>
+                        <a href="{% url 'login' %}" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-slate-800 text-slate-100 border border-slate-700 hover:bg-slate-700">Entrar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <h2 class="text-xl font-semibold text-slate-100 text-center">Tudo o que você precisa em um só lugar</h2>
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <article class="bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl shadow-black/20">
+                    <svg class="size-8 text-violet-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/>
+                    </svg>
+                    <h3 class="mt-4 text-sm font-medium text-slate-400 uppercase tracking-wide">Contas</h3>
+                    <p class="mt-2 text-sm text-slate-300">Cadastre suas contas bancárias, carteiras e investimentos e acompanhe o saldo de cada uma.</p>
+                </article>
+                <article class="bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl shadow-black/20">
+                    <svg class="size-8 text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581a2.25 2.25 0 003.182 0l4.318-4.318a2.25 2.25 0 000-3.182L11.16 3.66A2.25 2.25 0 009.568 3zM6 6h.008v.008H6V6z"/>
+                    </svg>
+                    <h3 class="mt-4 text-sm font-medium text-slate-400 uppercase tracking-wide">Categorias</h3>
+                    <p class="mt-2 text-sm text-slate-300">Organize suas entradas e saídas em categorias próprias, com as cores que preferir.</p>
+                </article>
+                <article class="bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl shadow-black/20">
+                    <svg class="size-8 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
+                    </svg>
+                    <h3 class="mt-4 text-sm font-medium text-slate-400 uppercase tracking-wide">Dashboard</h3>
+                    <p class="mt-2 text-sm text-slate-300">Veja o saldo total, as entradas e saídas do mês e as últimas transações em uma única tela.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-800">
+        <p class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-xs text-slate-500">Finanpy &copy; {% now 'Y' %}</p>
+    </footer>
+{% endblock %}

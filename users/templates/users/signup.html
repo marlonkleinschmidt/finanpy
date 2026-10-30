@@ -1,16 +1,31 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Criar conta | Finanpy</title>
-</head>
-<body>
-    <h1>Criar conta</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Cadastrar</button>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Crie sua conta | Finanpy{% endblock %}
+
+{% block navbar %}
+    {% include 'components/navbar_public.html' %}
+{% endblock %}
+
+{% block content %}
+    <main class="flex justify-center px-4 py-12">
+        <div class="w-full max-w-md bg-slate-900 border border-slate-700/50 rounded-2xl p-6 md:p-8 space-y-5 shadow-xl shadow-black/20">
+            <div class="text-center space-y-2">
+                {% include 'components/logo.html' %}
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-100">Crie sua conta</h1>
+            </div>
+            <form method="post" class="space-y-5">
+                {% csrf_token %}
+                {% include 'components/form_errors.html' %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {% include 'components/form_field.html' with field=form.first_name %}
+                    {% include 'components/form_field.html' with field=form.last_name %}
+                </div>
+                {% include 'components/form_field.html' with field=form.email %}
+                {% include 'components/form_field.html' with field=form.password1 %}
+                {% include 'components/form_field.html' with field=form.password2 %}
+                <button type="submit" class="w-full cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-violet-900/30 hover:opacity-90">Cadastrar</button>
+            </form>
+            <p class="text-center text-sm text-slate-400">Já tem conta? <a href="{% url 'login' %}" class="font-semibold text-violet-400 hover:text-violet-300">Entrar</a></p>
+        </div>
+    </main>
+{% endblock %}

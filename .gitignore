@@ -266,3 +266,4 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python,django
 # Tailwind (gerado no deploy)
 static/css/output.css
+tailwindcss.exe

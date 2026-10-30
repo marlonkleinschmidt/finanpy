@@ -1,0 +1,13 @@
+<header class="sticky top-0 z-30 backdrop-blur bg-slate-950/70 border-b border-slate-800">
+    <nav aria-label="Principal" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
+        {% include 'components/logo.html' %}
+        <div class="flex items-center gap-2">
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs sm:px-4 sm:py-2.5 sm:text-sm font-semibold whitespace-nowrap transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-violet-900/30 hover:opacity-90">Ir para o dashboard</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs sm:px-4 sm:py-2.5 sm:text-sm font-semibold whitespace-nowrap transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 text-slate-300 hover:text-white hover:bg-slate-800">Entrar</a>
+                <a href="{% url 'signup' %}" class="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs sm:px-4 sm:py-2.5 sm:text-sm font-semibold whitespace-nowrap transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-violet-900/30 hover:opacity-90">Cadastre-se</a>
+            {% endif %}
+        </div>
+    </nav>
+</header>

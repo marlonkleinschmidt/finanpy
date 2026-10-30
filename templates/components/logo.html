@@ -1,0 +1,1 @@
+<a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}" class="inline-block text-2xl font-extrabold bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-300 bg-clip-text text-transparent">Finanpy</a>

@@ -107,70 +107,70 @@
 
 ---
 
-### Sprint 2 — Design system, layout base e landing page
+### [x] Sprint 2 — Design system, layout base e landing page
 
-- [ ] **2.1 Instalar TailwindCSS**
-  - [ ] 2.1.1 Baixar o executável standalone do Tailwind CLI para a plataforma de desenvolvimento.
-  - [ ] 2.1.2 Criar `static/css/input.css` com `@import 'tailwindcss';`.
-  - [ ] 2.1.3 Configurar `@source` para varrer `templates/**/*.html` e `*/templates/**/*.html` (e `*/forms.py`, onde ficam classes de widgets).
-  - [ ] 2.1.4 Definir no `@theme` a fonte `--font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif`.
-  - [ ] 2.1.5 Gerar `static/css/output.css` com `tailwindcss -i static/css/input.css -o static/css/output.css --watch`.
-  - [ ] 2.1.6 Documentar os comandos de build (dev com `--watch` e produção com `--minify`) no `README.md`.
+- [x] **2.1 Instalar TailwindCSS**
+  - [x] 2.1.1 Baixar o executável standalone do Tailwind CLI para a plataforma de desenvolvimento.
+  - [x] 2.1.2 Criar `static/css/input.css` com `@import 'tailwindcss';`.
+  - [x] 2.1.3 Configurar `@source` para varrer `templates/**/*.html` e `*/templates/**/*.html` (e `*/forms.py`, onde ficam classes de widgets).
+  - [x] 2.1.4 Definir no `@theme` a fonte `--font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif`.
+  - [x] 2.1.5 Gerar `static/css/output.css` com `tailwindcss -i static/css/input.css -o static/css/output.css --watch`.
+  - [x] 2.1.6 Documentar os comandos de build (dev com `--watch` e produção com `--minify`) no `README.md`.
 
-- [ ] **2.2 Template base**
-  - [ ] 2.2.1 Criar `templates/base.html` com `<!DOCTYPE html>`, `lang="pt-br"`, meta viewport e charset.
-  - [ ] 2.2.2 Carregar `{% load static %}` e o `output.css`.
-  - [ ] 2.2.3 Incluir a fonte Inter via Google Fonts.
-  - [ ] 2.2.4 Aplicar no `body`: `bg-slate-950 text-slate-100 font-sans antialiased min-h-screen`.
-  - [ ] 2.2.5 Criar blocos `{% block title %}`, `{% block content %}` e `{% block extra_js %}`.
-  - [ ] 2.2.6 Incluir `components/messages.html`.
+- [x] **2.2 Template base**
+  - [x] 2.2.1 Criar `templates/base.html` com `<!DOCTYPE html>`, `lang="pt-br"`, meta viewport e charset.
+  - [x] 2.2.2 Carregar `{% load static %}` e o `output.css`.
+  - [x] 2.2.3 Incluir a fonte Inter via Google Fonts.
+  - [x] 2.2.4 Aplicar no `body`: `bg-slate-950 text-slate-100 font-sans antialiased min-h-screen`.
+  - [x] 2.2.5 Criar blocos `{% block title %}`, `{% block content %}` e `{% block extra_js %}`.
+  - [x] 2.2.6 Incluir `components/messages.html`.
 
-- [ ] **2.3 Componentes reutilizáveis**
-  - [ ] 2.3.1 Criar `components/messages.html` com alertas de sucesso/erro/aviso conforme `message.tags`.
-  - [ ] 2.3.2 Criar `components/form_field.html` renderizando label, campo, erros e help_text.
-  - [ ] 2.3.3 Criar `components/page_header.html` recebendo `title` e, opcionalmente, `action_url` e `action_label`.
-  - [ ] 2.3.4 Criar `components/empty_state.html` recebendo mensagem, url e texto do botão.
-  - [ ] 2.3.5 Criar `components/pagination.html` preservando parâmetros GET da URL.
-  - [ ] 2.3.6 Criar `components/confirm_delete.html` com card de confirmação, botão perigo e botão cancelar.
-  - [ ] 2.3.7 Criar `components/kpi_card.html` recebendo título, valor e variante de cor.
+- [x] **2.3 Componentes reutilizáveis**
+  - [x] 2.3.1 Criar `components/messages.html` com alertas de sucesso/erro/aviso conforme `message.tags`.
+  - [x] 2.3.2 Criar `components/form_field.html` renderizando label, campo, erros e help_text.
+  - [x] 2.3.3 Criar `components/page_header.html` recebendo `title` e, opcionalmente, `action_url` e `action_label`.
+  - [x] 2.3.4 Criar `components/empty_state.html` recebendo mensagem, url e texto do botão.
+  - [x] 2.3.5 Criar `components/pagination.html` preservando parâmetros GET da URL.
+  - [x] 2.3.6 Criar `components/confirm_delete.html` com card de confirmação, botão perigo e botão cancelar.
+  - [x] 2.3.7 Criar `components/kpi_card.html` recebendo título, valor e variante de cor.
 
-- [ ] **2.4 Classes de widgets dos forms**
-  - [ ] 2.4.1 Criar `core/forms.py` com constante `INPUT_CLASSES` contendo as classes padrão de input.
-  - [ ] 2.4.2 Criar `StyledFormMixin` que, no `__init__`, aplica `INPUT_CLASSES` em todos os widgets do form.
-  - [ ] 2.4.3 Tratar checkbox e input de cor com classes específicas no mixin.
-  - [ ] 2.4.4 Aplicar o mixin em `SignUpForm` e `EmailAuthenticationForm`.
+- [x] **2.4 Classes de widgets dos forms**
+  - [x] 2.4.1 Criar `core/forms.py` com constante `INPUT_CLASSES` contendo as classes padrão de input.
+  - [x] 2.4.2 Criar `StyledFormMixin` que, no `__init__`, aplica `INPUT_CLASSES` em todos os widgets do form.
+  - [x] 2.4.3 Tratar checkbox e input de cor com classes específicas no mixin.
+  - [x] 2.4.4 Aplicar o mixin em `SignUpForm` e `EmailAuthenticationForm`.
 
-- [ ] **2.5 Navbar pública**
-  - [ ] 2.5.1 Criar `components/navbar_public.html` com logo "Finanpy" em gradiente de texto.
-  - [ ] 2.5.2 Exibir **Entrar** e **Cadastre-se** para visitantes.
-  - [ ] 2.5.3 Exibir **Ir para o dashboard** para usuários autenticados.
-  - [ ] 2.5.4 Garantir comportamento responsivo (botões compactos no mobile).
+- [x] **2.5 Navbar pública**
+  - [x] 2.5.1 Criar `components/navbar_public.html` com logo "Finanpy" em gradiente de texto.
+  - [x] 2.5.2 Exibir **Entrar** e **Cadastre-se** para visitantes.
+  - [x] 2.5.3 Exibir **Ir para o dashboard** para usuários autenticados.
+  - [x] 2.5.4 Garantir comportamento responsivo (botões compactos no mobile).
 
-- [ ] **2.6 Layout autenticado**
-  - [ ] 2.6.1 Criar `templates/base_auth.html` estendendo `base.html`.
-  - [ ] 2.6.2 Criar `components/sidebar.html` com links Dashboard, Contas, Categorias, Transações e Perfil.
-  - [ ] 2.6.3 Destacar o item ativo comparando `request.resolver_match.app_name`/`url_name`.
-  - [ ] 2.6.4 Adicionar botão **Sair** como formulário POST com `{% csrf_token %}`.
-  - [ ] 2.6.5 Exibir nome e e-mail do usuário logado no rodapé da sidebar.
-  - [ ] 2.6.6 Criar topbar mobile com botão hambúrguer.
-  - [ ] 2.6.7 Implementar toggle da sidebar no mobile com JavaScript puro (poucas linhas, em `{% block extra_js %}` ou `static/js/sidebar.js`).
-  - [ ] 2.6.8 Aplicar container padrão de conteúdo (`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6`).
+- [x] **2.6 Layout autenticado**
+  - [x] 2.6.1 Criar `templates/base_auth.html` estendendo `base.html`.
+  - [x] 2.6.2 Criar `components/sidebar.html` com links Dashboard, Contas, Categorias, Transações e Perfil.
+  - [x] 2.6.3 Destacar o item ativo comparando `request.resolver_match.app_name`/`url_name`.
+  - [x] 2.6.4 Adicionar botão **Sair** como formulário POST com `{% csrf_token %}`.
+  - [x] 2.6.5 Exibir nome e e-mail do usuário logado no rodapé da sidebar.
+  - [x] 2.6.6 Criar topbar mobile com botão hambúrguer.
+  - [x] 2.6.7 Implementar toggle da sidebar no mobile com JavaScript puro (poucas linhas, em `{% block extra_js %}` ou `static/js/sidebar.js`).
+  - [x] 2.6.8 Aplicar container padrão de conteúdo (`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6`).
 
-- [ ] **2.7 Landing page**
-  - [ ] 2.7.1 Criar `HomeView(TemplateView)` em `core/views.py` com `template_name = 'home.html'`.
-  - [ ] 2.7.2 Registrar rota `''` com name `home` em `core/urls.py`.
-  - [ ] 2.7.3 Criar `templates/home.html` estendendo `base.html` com a navbar pública.
-  - [ ] 2.7.4 Implementar seção hero com fundo em gradiente, título em gradiente de texto, subtítulo e botões **Cadastre-se** e **Entrar**.
-  - [ ] 2.7.5 Implementar seção de benefícios com 3 cards (Contas, Categorias, Dashboard).
-  - [ ] 2.7.6 Implementar rodapé simples com nome do produto e ano.
-  - [ ] 2.7.7 Validar responsividade em 375px, 768px e 1280px.
+- [x] **2.7 Landing page**
+  - [x] 2.7.1 Criar `HomeView(TemplateView)` em `core/views.py` com `template_name = 'home.html'`.
+  - [x] 2.7.2 Registrar rota `''` com name `home` em `core/urls.py`.
+  - [x] 2.7.3 Criar `templates/home.html` estendendo `base.html` com a navbar pública.
+  - [x] 2.7.4 Implementar seção hero com fundo em gradiente, título em gradiente de texto, subtítulo e botões **Cadastre-se** e **Entrar**.
+  - [x] 2.7.5 Implementar seção de benefícios com 3 cards (Contas, Categorias, Dashboard).
+  - [x] 2.7.6 Implementar rodapé simples com nome do produto e ano.
+  - [x] 2.7.7 Validar responsividade em 375px, 768px e 1280px.
 
-- [ ] **2.8 Estilizar telas de autenticação**
-  - [ ] 2.8.1 Reescrever `users/signup.html` com card centralizado, logo, título "Crie sua conta" e campos via `form_field.html`.
-  - [ ] 2.8.2 Adicionar link "Já tem conta? Entrar" no cadastro.
-  - [ ] 2.8.3 Reescrever `users/login.html` com card centralizado e título "Entrar no Finanpy".
-  - [ ] 2.8.4 Adicionar link "Ainda não tem conta? Cadastre-se" no login.
-  - [ ] 2.8.5 Exibir erros não vinculados a campos (`form.non_field_errors`) com alerta de erro.
+- [x] **2.8 Estilizar telas de autenticação**
+  - [x] 2.8.1 Reescrever `users/signup.html` com card centralizado, logo, título "Crie sua conta" e campos via `form_field.html`.
+  - [x] 2.8.2 Adicionar link "Já tem conta? Entrar" no cadastro.
+  - [x] 2.8.3 Reescrever `users/login.html` com card centralizado e título "Entrar no Finanpy".
+  - [x] 2.8.4 Adicionar link "Ainda não tem conta? Cadastre-se" no login.
+  - [x] 2.8.5 Exibir erros não vinculados a campos (`form.non_field_errors`) com alerta de erro.
 
 ---
 

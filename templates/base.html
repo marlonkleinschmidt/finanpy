@@ -1,0 +1,27 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Finanpy{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen">
+    {# O base_auth.html sobrescreve layout e recoloca messages e content dentro do container, ao lado da sidebar. #}
+    {% block layout %}
+        {% block navbar %}{% endblock %}
+        {% block messages %}
+            {% if messages %}
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+                    {% include 'components/messages.html' %}
+                </div>
+            {% endif %}
+        {% endblock %}
+        {% block content %}{% endblock %}
+    {% endblock %}
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

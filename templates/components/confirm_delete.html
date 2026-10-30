@@ -1,7 +1,7 @@
 {# Recebe: message e cancel_url e, opcionalmente, title e confirm_label. Envia o POST para a própria URL da DeleteView. #}
 <div class="max-w-lg mx-auto bg-slate-900 border border-slate-700/50 rounded-2xl p-6 md:p-8 shadow-xl shadow-black/20">
     <h2 class="text-xl font-semibold text-slate-100">{{ title|default:'Confirmar exclusão' }}</h2>
-    <p class="mt-2 text-sm text-slate-300">{{ message }}</p>
+    <p class="mt-2 text-sm text-slate-300 wrap-break-word">{{ message }}</p>
     <form method="post" class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4">
         {% csrf_token %}
         <a href="{{ cancel_url }}" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-slate-800 text-slate-100 border border-slate-700 hover:bg-slate-700">Cancelar</a>

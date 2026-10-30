@@ -1,0 +1,11 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Categorias | Finanpy{% endblock %}
+
+{% block content %}
+    {% include 'components/page_header.html' with title='Excluir categoria' %}
+    {% url 'categories:list' as list_url %}
+    {% with message='Tem certeza de que deseja excluir a categoria “'|add:category.name|add:'”? Esta ação não pode ser desfeita.' %}
+        {% include 'components/confirm_delete.html' with message=message cancel_url=list_url %}
+    {% endwith %}
+{% endblock %}

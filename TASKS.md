@@ -248,44 +248,44 @@
 
 ---
 
-### Sprint 5 — Categorias
+### [x] Sprint 5 — Categorias
 
-- [ ] **5.1 Model `Category`**
-  - [ ] 5.1.1 Criar `Category(TimeStampedModel)` com `user` (FK, `related_name='categories'`).
-  - [ ] 5.1.2 Adicionar `name = CharField('Nome', max_length=100)`.
-  - [ ] 5.1.3 Criar `CategoryType(TextChoices)` com `INCOME='income', 'Entrada'` e `EXPENSE='expense', 'Saída'`.
-  - [ ] 5.1.4 Adicionar `category_type = CharField('Tipo', choices=CategoryType.choices)`.
-  - [ ] 5.1.5 Adicionar `color = CharField('Cor', max_length=7, default='#8B5CF6')`.
-  - [ ] 5.1.6 Adicionar `UniqueConstraint(fields=['user', 'name', 'category_type'], name='unique_category_per_user')`.
-  - [ ] 5.1.7 Definir `Meta.ordering = ['category_type', 'name']` e `verbose_name` em português.
-  - [ ] 5.1.8 Gerar e aplicar migration.
+- [x] **5.1 Model `Category`**
+  - [x] 5.1.1 Criar `Category(TimeStampedModel)` com `user` (FK, `related_name='categories'`).
+  - [x] 5.1.2 Adicionar `name = CharField('Nome', max_length=100)`.
+  - [x] 5.1.3 Criar `CategoryType(TextChoices)` com `INCOME='income', 'Entrada'` e `EXPENSE='expense', 'Saída'`.
+  - [x] 5.1.4 Adicionar `category_type = CharField('Tipo', choices=CategoryType.choices)`.
+  - [x] 5.1.5 Adicionar `color = CharField('Cor', max_length=7, default='#8B5CF6')`.
+  - [x] 5.1.6 Adicionar `UniqueConstraint(fields=['user', 'name', 'category_type'], name='unique_category_per_user')`.
+  - [x] 5.1.7 Definir `Meta.ordering = ['category_type', 'name']` e `verbose_name` em português.
+  - [x] 5.1.8 Gerar e aplicar migration.
 
-- [ ] **5.2 Admin de categorias**
-  - [ ] 5.2.1 Registrar `Category` com `list_display` (`name`, `category_type`, `user`) e `list_filter`.
+- [x] **5.2 Admin de categorias**
+  - [x] 5.2.1 Registrar `Category` com `list_display` (`name`, `category_type`, `user`) e `list_filter`.
 
-- [ ] **5.3 Formulário de categoria**
-  - [ ] 5.3.1 Criar `CategoryForm(StyledFormMixin, ModelForm)` com campos `name`, `category_type`, `color`.
-  - [ ] 5.3.2 Usar widget `TextInput(attrs={'type': 'color'})` para o campo cor.
-  - [ ] 5.3.3 Receber `user` no `__init__` e validar duplicidade de nome + tipo no `clean`, com mensagem "Você já possui uma categoria com este nome e tipo."
-  - [ ] 5.3.4 Passar `user` via `get_form_kwargs` nas views.
+- [x] **5.3 Formulário de categoria**
+  - [x] 5.3.1 Criar `CategoryForm(StyledFormMixin, ModelForm)` com campos `name`, `category_type`, `color`.
+  - [x] 5.3.2 Usar widget `TextInput(attrs={'type': 'color'})` para o campo cor.
+  - [x] 5.3.3 Receber `user` no `__init__` e validar duplicidade de nome + tipo no `clean`, com mensagem "Você já possui uma categoria com este nome e tipo."
+  - [x] 5.3.4 Passar `user` via `get_form_kwargs` nas views.
 
-- [ ] **5.4 Views de categorias**
-  - [ ] 5.4.1 `CategoryListView` com mixins de login e isolamento.
-  - [ ] 5.4.2 `CategoryCreateView` com mensagem "Categoria criada com sucesso."
-  - [ ] 5.4.3 `CategoryUpdateView` com mensagem "Categoria atualizada com sucesso."
-  - [ ] 5.4.4 `CategoryDeleteView` com mensagem de sucesso.
+- [x] **5.4 Views de categorias**
+  - [x] 5.4.1 `CategoryListView` com mixins de login e isolamento.
+  - [x] 5.4.2 `CategoryCreateView` com mensagem "Categoria criada com sucesso."
+  - [x] 5.4.3 `CategoryUpdateView` com mensagem "Categoria atualizada com sucesso."
+  - [x] 5.4.4 `CategoryDeleteView` com mensagem de sucesso.
 
-- [ ] **5.5 URLs de categorias**
-  - [ ] 5.5.1 Criar `categories/urls.py` com `app_name = 'categories'` e rotas list/new/edit/delete.
-  - [ ] 5.5.2 Incluir em `core/urls.py` com prefixo `categories/`.
+- [x] **5.5 URLs de categorias**
+  - [x] 5.5.1 Criar `categories/urls.py` com `app_name = 'categories'` e rotas list/new/edit/delete.
+  - [x] 5.5.2 Incluir em `core/urls.py` com prefixo `categories/`.
 
-- [ ] **5.6 Templates de categorias**
-  - [ ] 5.6.1 `categories/category_list.html` exibindo duas seções: "Entradas" e "Saídas".
-  - [ ] 5.6.2 Exibir bolinha com a cor da categoria, nome, badge de tipo e ações.
-  - [ ] 5.6.3 Exibir estado vazio quando não houver categorias.
-  - [ ] 5.6.4 `categories/category_form.html` com título dinâmico.
-  - [ ] 5.6.5 `categories/category_confirm_delete.html` usando o componente de confirmação.
-  - [ ] 5.6.6 Adicionar link "Categorias" funcional na sidebar.
+- [x] **5.6 Templates de categorias**
+  - [x] 5.6.1 `categories/category_list.html` exibindo duas seções: "Entradas" e "Saídas".
+  - [x] 5.6.2 Exibir bolinha com a cor da categoria, nome, badge de tipo e ações.
+  - [x] 5.6.3 Exibir estado vazio quando não houver categorias.
+  - [x] 5.6.4 `categories/category_form.html` com título dinâmico.
+  - [x] 5.6.5 `categories/category_confirm_delete.html` usando o componente de confirmação.
+  - [x] 5.6.6 Adicionar link "Categorias" funcional na sidebar.
 
 ---
 

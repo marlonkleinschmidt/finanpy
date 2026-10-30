@@ -1,0 +1,38 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Categorias | Finanpy{% endblock %}
+
+{% block content %}
+    {% url 'categories:create' as create_url %}
+    {% include 'components/page_header.html' with title='Categorias' action_url=create_url action_label='Nova categoria' %}
+    {% if categories %}
+        <div class="space-y-8">
+            <section>
+                <h2 class="text-xl font-semibold text-slate-100 mb-4">Entradas</h2>
+                {% if income_categories %}
+                    <ul class="divide-y divide-slate-800 overflow-hidden rounded-2xl border border-slate-700/50">
+                        {% for category in income_categories %}
+                            {% include 'categories/category_item.html' %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-sm text-slate-400">Nenhuma categoria de entrada cadastrada.</p>
+                {% endif %}
+            </section>
+            <section>
+                <h2 class="text-xl font-semibold text-slate-100 mb-4">Saídas</h2>
+                {% if expense_categories %}
+                    <ul class="divide-y divide-slate-800 overflow-hidden rounded-2xl border border-slate-700/50">
+                        {% for category in expense_categories %}
+                            {% include 'categories/category_item.html' %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-sm text-slate-400">Nenhuma categoria de saída cadastrada.</p>
+                {% endif %}
+            </section>
+        </div>
+    {% else %}
+        {% include 'components/empty_state.html' with message='Você ainda não cadastrou nenhuma categoria.' action_url=create_url action_label='Nova categoria' %}
+    {% endif %}
+{% endblock %}

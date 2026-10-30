@@ -3,7 +3,84 @@
 {% block title %}Dashboard | Finanpy{% endblock %}
 
 {% block content %}
-    {# Provisório: o dashboard completo é construído na Sprint 7. #}
-    {% include 'components/page_header.html' with title='Dashboard' %}
-    <p class="text-sm text-slate-300">O painel estará disponível em breve.</p>
+    {% url 'accounts:list' as account_list_url %}
+    {% url 'accounts:create' as account_create_url %}
+    {% url 'transactions:list' as transaction_list_url %}
+    {% url 'transactions:create' as transaction_create_url %}
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+        <div class="min-w-0">
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-100 break-words">Olá, {{ user.first_name }}</h1>
+            <p class="mt-1 text-sm text-slate-400">Resumo de {{ current_month }}</p>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:shrink-0 gap-3">
+            <a href="{{ transaction_create_url }}" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-violet-900/30 hover:opacity-90">Nova transação</a>
+            <a href="{{ account_create_url }}" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-slate-800 text-slate-100 border border-slate-700 hover:bg-slate-700">Nova conta</a>
+        </div>
+    </div>
+
+    {# Desvio do PRD: 4 colunas só a partir de xl, não de lg, porque o PRD não considera a sidebar fixa de 256px. #}
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+        {% include 'components/kpi_card.html' with title='Saldo total' value=total_balance variant='highlight' compact=True %}
+        {% include 'components/kpi_card.html' with title='Entradas do mês' value=month_income variant='income' compact=True %}
+        {% include 'components/kpi_card.html' with title='Saídas do mês' value=month_expense variant='expense' compact=True %}
+        {# A variante expense já escreve o sinal, então recebe o valor sem sinal. #}
+        {% if month_result < 0 %}
+            {% include 'components/kpi_card.html' with title='Resultado do mês' value=month_result_abs variant='expense' compact=True %}
+        {% else %}
+            {% include 'components/kpi_card.html' with title='Resultado do mês' value=month_result variant='income' compact=True %}
+        {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section class="min-w-0 lg:col-span-2" aria-labelledby="latest-transactions-title">
+            <div class="flex items-center justify-between gap-3 mb-4">
+                <h2 id="latest-transactions-title" class="min-w-0 text-xl font-semibold text-slate-100">Últimas transações</h2>
+                <a href="{{ transaction_list_url }}" class="shrink-0 rounded-lg text-sm font-semibold text-violet-400 hover:text-violet-300 transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950">Ver todas</a>
+            </div>
+            {% if latest_transactions %}
+                <ul class="bg-slate-900 border border-slate-700/50 rounded-2xl shadow-xl shadow-black/20 divide-y divide-slate-800">
+                    {% for transaction in latest_transactions %}
+                        <li class="flex items-center gap-3 px-4 py-3 sm:px-6">
+                            <span class="size-3 shrink-0 rounded-full" style="background-color: {{ transaction.category.color }}" aria-hidden="true"></span>
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm font-semibold text-slate-100" title="{{ transaction.description }}">{{ transaction.description }}</p>
+                                <p class="truncate text-xs text-slate-400" title="{{ transaction.category.name }} · {{ transaction.account.name }}"><span class="tabular-nums">{{ transaction.date|date:'d/m/Y' }}</span> · {{ transaction.category.name }} · {{ transaction.account.name }}</p>
+                            </div>
+                            {% if transaction.transaction_type == 'income' %}
+                                <span class="shrink-0 whitespace-nowrap text-sm text-emerald-400 font-semibold tabular-nums">+ R$ {{ transaction.amount|floatformat:'2g' }}</span>
+                            {% else %}
+                                <span class="shrink-0 whitespace-nowrap text-sm text-rose-400 font-semibold tabular-nums">− R$ {{ transaction.amount|floatformat:'2g' }}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {% include 'components/empty_state.html' with message='Você ainda não registrou nenhuma transação.' action_url=transaction_create_url action_label='Nova transação' %}
+            {% endif %}
+        </section>
+
+        <section class="min-w-0" aria-labelledby="my-accounts-title">
+            <div class="flex items-center justify-between gap-3 mb-4">
+                <h2 id="my-accounts-title" class="min-w-0 text-xl font-semibold text-slate-100">Minhas contas</h2>
+                <a href="{{ account_list_url }}" class="shrink-0 rounded-lg text-sm font-semibold text-violet-400 hover:text-violet-300 transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950">Ver todas</a>
+            </div>
+            {% if accounts %}
+                <ul class="bg-slate-900 border border-slate-700/50 rounded-2xl shadow-xl shadow-black/20 divide-y divide-slate-800">
+                    {% for account in accounts %}
+                        {# Na coluna estreita do lg, o saldo desce para a linha de baixo em vez de espremer o nome. #}
+                        <li class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-3">
+                            <div class="min-w-0 flex-1 basis-24">
+                                <p class="truncate text-sm font-semibold text-slate-100" title="{{ account.name }}">{{ account.name }}</p>
+                                <p class="truncate text-xs text-slate-400">{{ account.get_account_type_display }}</p>
+                            </div>
+                            <span class="ml-auto whitespace-nowrap text-sm text-slate-100 font-semibold tabular-nums">{% include 'components/balance.html' with value=account.current_balance %}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {% include 'components/empty_state.html' with message='Você ainda não cadastrou nenhuma conta.' action_url=account_create_url action_label='Nova conta' %}
+            {% endif %}
+        </section>
+    </div>
 {% endblock %}

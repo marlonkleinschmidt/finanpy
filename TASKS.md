@@ -354,33 +354,33 @@
 
 ---
 
-### Sprint 7 — Dashboard
+### [x] Sprint 7 — Dashboard
 
-- [ ] **7.1 View do dashboard**
-  - [ ] 7.1.1 Criar `DashboardView(LoginRequiredMixin, TemplateView)` em `core/views.py` com `template_name = 'dashboard.html'`.
-  - [ ] 7.1.2 Registrar rota `dashboard/` com name `dashboard`.
-  - [ ] 7.1.3 Calcular o saldo total somando `current_balance` das contas do usuário.
-  - [ ] 7.1.4 Calcular total de entradas do mês corrente (`date__year`, `date__month`).
-  - [ ] 7.1.5 Calcular total de saídas do mês corrente.
-  - [ ] 7.1.6 Calcular resultado do mês (entradas − saídas).
-  - [ ] 7.1.7 Buscar as 5 últimas transações com `select_related`.
-  - [ ] 7.1.8 Buscar a lista de contas do usuário.
-  - [ ] 7.1.9 Adicionar o nome do mês atual em português no contexto (ex.: "outubro de 2026").
+- [x] **7.1 View do dashboard**
+  - [x] 7.1.1 Criar `DashboardView(LoginRequiredMixin, TemplateView)` em `core/views.py` com `template_name = 'dashboard.html'`.
+  - [x] 7.1.2 Registrar rota `dashboard/` com name `dashboard`.
+  - [x] 7.1.3 Calcular o saldo total somando `current_balance` das contas do usuário.
+  - [x] 7.1.4 Calcular total de entradas do mês corrente (`date__year`, `date__month`).
+  - [x] 7.1.5 Calcular total de saídas do mês corrente.
+  - [x] 7.1.6 Calcular resultado do mês (entradas − saídas).
+  - [x] 7.1.7 Buscar as 5 últimas transações com `select_related`.
+  - [x] 7.1.8 Buscar a lista de contas do usuário.
+  - [x] 7.1.9 Adicionar o nome do mês atual em português no contexto (ex.: "outubro de 2026").
 
-- [ ] **7.2 Template do dashboard**
-  - [ ] 7.2.1 Criar `templates/dashboard.html` estendendo `base_auth.html`.
-  - [ ] 7.2.2 Saudação "Olá, {{ user.first_name }}" e subtítulo com o mês atual.
-  - [ ] 7.2.3 Grid de 4 KPI cards: Saldo total (destaque em gradiente), Entradas do mês (verde), Saídas do mês (vermelho), Resultado do mês (verde ou vermelho conforme sinal).
-  - [ ] 7.2.4 Seção "Últimas transações" com lista e link "Ver todas".
-  - [ ] 7.2.5 Seção "Minhas contas" com nome, tipo e saldo de cada conta.
-  - [ ] 7.2.6 Botões de ação rápida: "Nova transação" e "Nova conta".
-  - [ ] 7.2.7 Estados vazios para usuário sem contas e sem transações.
-  - [ ] 7.2.8 Validar responsividade do dashboard.
+- [x] **7.2 Template do dashboard**
+  - [x] 7.2.1 Criar `templates/dashboard.html` estendendo `base_auth.html`.
+  - [x] 7.2.2 Saudação "Olá, {{ user.first_name }}" e subtítulo com o mês atual.
+  - [x] 7.2.3 Grid de 4 KPI cards: Saldo total (destaque em gradiente), Entradas do mês (verde), Saídas do mês (vermelho), Resultado do mês (verde ou vermelho conforme sinal).
+  - [x] 7.2.4 Seção "Últimas transações" com lista e link "Ver todas".
+  - [x] 7.2.5 Seção "Minhas contas" com nome, tipo e saldo de cada conta.
+  - [x] 7.2.6 Botões de ação rápida: "Nova transação" e "Nova conta".
+  - [x] 7.2.7 Estados vazios para usuário sem contas e sem transações.
+  - [x] 7.2.8 Validar responsividade do dashboard.
 
-- [ ] **7.3 Integração de navegação**
-  - [ ] 7.3.1 Confirmar que login e cadastro redirecionam ao dashboard.
-  - [ ] 7.3.2 Confirmar que o link "Dashboard" da sidebar fica ativo na página.
-  - [ ] 7.3.3 Confirmar que a landing mostra "Ir para o dashboard" para usuários logados.
+- [x] **7.3 Integração de navegação**
+  - [x] 7.3.1 Confirmar que login e cadastro redirecionam ao dashboard.
+  - [x] 7.3.2 Confirmar que o link "Dashboard" da sidebar fica ativo na página.
+  - [x] 7.3.3 Confirmar que a landing mostra "Ir para o dashboard" para usuários logados.
 
 ---
 

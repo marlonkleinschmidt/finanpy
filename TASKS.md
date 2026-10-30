@@ -203,48 +203,48 @@
 
 ---
 
-### Sprint 4 — Contas bancárias
+### [x] Sprint 4 — Contas bancárias
 
-- [ ] **4.1 Mixin de isolamento por usuário**
-  - [ ] 4.1.1 Criar em `core/mixins.py` o `UserQuerySetMixin` que filtra `get_queryset()` por `user=self.request.user`.
-  - [ ] 4.1.2 Criar `UserFormMixin` que atribui `form.instance.user = self.request.user` no `form_valid`.
+- [x] **4.1 Mixin de isolamento por usuário**
+  - [x] 4.1.1 Criar em `core/mixins.py` o `UserQuerySetMixin` que filtra `get_queryset()` por `user=self.request.user`.
+  - [x] 4.1.2 Criar `UserFormMixin` que atribui `form.instance.user = self.request.user` no `form_valid`.
 
-- [ ] **4.2 Model `Account`**
-  - [ ] 4.2.1 Criar `Account(TimeStampedModel)` com `user` (FK, `related_name='accounts'`).
-  - [ ] 4.2.2 Adicionar `name = CharField('Nome', max_length=100)`.
-  - [ ] 4.2.3 Adicionar `bank_name = CharField('Banco', max_length=100, blank=True)`.
-  - [ ] 4.2.4 Criar `AccountType(TextChoices)` com `CHECKING='checking', 'Conta corrente'`, `SAVINGS='savings', 'Poupança'`, `WALLET='wallet', 'Carteira'`, `INVESTMENT='investment', 'Investimento'`.
-  - [ ] 4.2.5 Adicionar `account_type = CharField('Tipo', choices=AccountType.choices, default=AccountType.CHECKING)`.
-  - [ ] 4.2.6 Adicionar `initial_balance = DecimalField('Saldo inicial', max_digits=12, decimal_places=2, default=0)`.
-  - [ ] 4.2.7 Definir `Meta.ordering = ['name']` e `verbose_name` em português.
-  - [ ] 4.2.8 Implementar `__str__` retornando o nome.
-  - [ ] 4.2.9 Gerar e aplicar migration.
+- [x] **4.2 Model `Account`**
+  - [x] 4.2.1 Criar `Account(TimeStampedModel)` com `user` (FK, `related_name='accounts'`).
+  - [x] 4.2.2 Adicionar `name = CharField('Nome', max_length=100)`.
+  - [x] 4.2.3 Adicionar `bank_name = CharField('Banco', max_length=100, blank=True)`.
+  - [x] 4.2.4 Criar `AccountType(TextChoices)` com `CHECKING='checking', 'Conta corrente'`, `SAVINGS='savings', 'Poupança'`, `WALLET='wallet', 'Carteira'`, `INVESTMENT='investment', 'Investimento'`.
+  - [x] 4.2.5 Adicionar `account_type = CharField('Tipo', choices=AccountType.choices, default=AccountType.CHECKING)`.
+  - [x] 4.2.6 Adicionar `initial_balance = DecimalField('Saldo inicial', max_digits=12, decimal_places=2, default=0)`.
+  - [x] 4.2.7 Definir `Meta.ordering = ['name']` e `verbose_name` em português.
+  - [x] 4.2.8 Implementar `__str__` retornando o nome.
+  - [x] 4.2.9 Gerar e aplicar migration.
 
-- [ ] **4.3 Admin de contas**
-  - [ ] 4.3.1 Registrar `Account` com `list_display`, `list_filter` (`account_type`) e `search_fields` (`name`, `bank_name`).
+- [x] **4.3 Admin de contas**
+  - [x] 4.3.1 Registrar `Account` com `list_display`, `list_filter` (`account_type`) e `search_fields` (`name`, `bank_name`).
 
-- [ ] **4.4 Formulário de conta**
-  - [ ] 4.4.1 Criar `accounts/forms.py` com `AccountForm(StyledFormMixin, ModelForm)` e campos `name`, `bank_name`, `account_type`, `initial_balance`.
+- [x] **4.4 Formulário de conta**
+  - [x] 4.4.1 Criar `accounts/forms.py` com `AccountForm(StyledFormMixin, ModelForm)` e campos `name`, `bank_name`, `account_type`, `initial_balance`.
 
-- [ ] **4.5 Views de contas**
-  - [ ] 4.5.1 `AccountListView(LoginRequiredMixin, UserQuerySetMixin, ListView)`.
-  - [ ] 4.5.2 `AccountCreateView(LoginRequiredMixin, UserFormMixin, SuccessMessageMixin, CreateView)` com mensagem "Conta criada com sucesso."
-  - [ ] 4.5.3 `AccountUpdateView(LoginRequiredMixin, UserQuerySetMixin, SuccessMessageMixin, UpdateView)` com mensagem "Conta atualizada com sucesso."
-  - [ ] 4.5.4 `AccountDeleteView(LoginRequiredMixin, UserQuerySetMixin, DeleteView)` com mensagem de sucesso.
-  - [ ] 4.5.5 Definir `success_url = reverse_lazy('accounts:list')` nas views de criação, edição e exclusão.
+- [x] **4.5 Views de contas**
+  - [x] 4.5.1 `AccountListView(LoginRequiredMixin, UserQuerySetMixin, ListView)`.
+  - [x] 4.5.2 `AccountCreateView(LoginRequiredMixin, UserFormMixin, SuccessMessageMixin, CreateView)` com mensagem "Conta criada com sucesso."
+  - [x] 4.5.3 `AccountUpdateView(LoginRequiredMixin, UserQuerySetMixin, SuccessMessageMixin, UpdateView)` com mensagem "Conta atualizada com sucesso."
+  - [x] 4.5.4 `AccountDeleteView(LoginRequiredMixin, UserQuerySetMixin, DeleteView)` com mensagem de sucesso.
+  - [x] 4.5.5 Definir `success_url = reverse_lazy('accounts:list')` nas views de criação, edição e exclusão.
 
-- [ ] **4.6 URLs de contas**
-  - [ ] 4.6.1 Criar `accounts/urls.py` com `app_name = 'accounts'`.
-  - [ ] 4.6.2 Rotas: `''` (list), `new/` (create), `<int:pk>/edit/` (update), `<int:pk>/delete/` (delete).
-  - [ ] 4.6.3 Incluir em `core/urls.py` com prefixo `accounts/`.
+- [x] **4.6 URLs de contas**
+  - [x] 4.6.1 Criar `accounts/urls.py` com `app_name = 'accounts'`.
+  - [x] 4.6.2 Rotas: `''` (list), `new/` (create), `<int:pk>/edit/` (update), `<int:pk>/delete/` (delete).
+  - [x] 4.6.3 Incluir em `core/urls.py` com prefixo `accounts/`.
 
-- [ ] **4.7 Templates de contas**
-  - [ ] 4.7.1 `accounts/account_list.html`: page header com botão "Nova conta", tabela (desktop) e cards (mobile).
-  - [ ] 4.7.2 Exibir colunas Nome, Banco, Tipo (`get_account_type_display`), Saldo inicial e ações.
-  - [ ] 4.7.3 Exibir estado vazio quando não houver contas.
-  - [ ] 4.7.4 `accounts/account_form.html` reutilizado para criar/editar, com título dinâmico ("Nova conta" / "Editar conta").
-  - [ ] 4.7.5 `accounts/account_confirm_delete.html` usando o componente de confirmação.
-  - [ ] 4.7.6 Adicionar link "Contas" funcional na sidebar.
+- [x] **4.7 Templates de contas**
+  - [x] 4.7.1 `accounts/account_list.html`: page header com botão "Nova conta", tabela (desktop) e cards (mobile).
+  - [x] 4.7.2 Exibir colunas Nome, Banco, Tipo (`get_account_type_display`), Saldo inicial e ações.
+  - [x] 4.7.3 Exibir estado vazio quando não houver contas.
+  - [x] 4.7.4 `accounts/account_form.html` reutilizado para criar/editar, com título dinâmico ("Nova conta" / "Editar conta").
+  - [x] 4.7.5 `accounts/account_confirm_delete.html` usando o componente de confirmação.
+  - [x] 4.7.6 Adicionar link "Contas" funcional na sidebar.
 
 ---
 

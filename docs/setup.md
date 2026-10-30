@@ -15,6 +15,9 @@ source venv/bin/activate     # Linux/macOS
 # instalar as dependências
 pip install -r requirements.txt
 
+# instalar também as ferramentas de desenvolvimento (ruff)
+pip install -r requirements-dev.txt
+
 # copiar o arquivo de variáveis de ambiente
 copy .env.example .env       # Windows
 cp .env.example .env         # Linux/macOS

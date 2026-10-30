@@ -1,3 +1,9 @@
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+select = ['E', 'W', 'F', 'Q']
+
 [tool.ruff.lint.flake8-quotes]
 inline-quotes = 'single'
 

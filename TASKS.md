@@ -103,7 +103,7 @@
 - [ ] **1.8 Templates provisórios de autenticação**
   - [x] 1.8.1 Criar `users/templates/users/signup.html` com formulário simples (será estilizado na Sprint 2).
   - [x] 1.8.2 Criar `users/templates/users/login.html` com formulário simples.
-  - [ ] 1.8.3 Testar manualmente cadastro, login com e-mail e logout.
+  - [x] 1.8.3 Testar manualmente cadastro, login com e-mail e logout.
 
 ---
 
@@ -289,68 +289,68 @@
 
 ---
 
-### Sprint 6 — Transações
+### [x] Sprint 6 — Transações
 
-- [ ] **6.1 Model `Transaction`**
-  - [ ] 6.1.1 Criar `Transaction(TimeStampedModel)` com `user` (FK, `related_name='transactions'`).
-  - [ ] 6.1.2 Criar `TransactionType(TextChoices)` com `INCOME='income', 'Entrada'` e `EXPENSE='expense', 'Saída'`.
-  - [ ] 6.1.3 Adicionar `transaction_type = CharField('Tipo', choices=TransactionType.choices)`.
-  - [ ] 6.1.4 Adicionar `amount = DecimalField('Valor', max_digits=12, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])`.
-  - [ ] 6.1.5 Adicionar `date = DateField('Data', default=timezone.localdate)`.
-  - [ ] 6.1.6 Adicionar `description = CharField('Descrição', max_length=255)`.
-  - [ ] 6.1.7 Adicionar `account = ForeignKey('accounts.Account', on_delete=PROTECT, related_name='transactions')`.
-  - [ ] 6.1.8 Adicionar `category = ForeignKey('categories.Category', on_delete=PROTECT, related_name='transactions')`.
-  - [ ] 6.1.9 Definir `Meta.ordering = ['-date', '-created_at']` e `verbose_name` em português.
-  - [ ] 6.1.10 Gerar e aplicar migration.
+- [x] **6.1 Model `Transaction`**
+  - [x] 6.1.1 Criar `Transaction(TimeStampedModel)` com `user` (FK, `related_name='transactions'`).
+  - [x] 6.1.2 Criar `TransactionType(TextChoices)` com `INCOME='income', 'Entrada'` e `EXPENSE='expense', 'Saída'`.
+  - [x] 6.1.3 Adicionar `transaction_type = CharField('Tipo', choices=TransactionType.choices)`.
+  - [x] 6.1.4 Adicionar `amount = DecimalField('Valor', max_digits=12, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])`.
+  - [x] 6.1.5 Adicionar `date = DateField('Data', default=timezone.localdate)`.
+  - [x] 6.1.6 Adicionar `description = CharField('Descrição', max_length=255)`.
+  - [x] 6.1.7 Adicionar `account = ForeignKey('accounts.Account', on_delete=PROTECT, related_name='transactions')`.
+  - [x] 6.1.8 Adicionar `category = ForeignKey('categories.Category', on_delete=PROTECT, related_name='transactions')`.
+  - [x] 6.1.9 Definir `Meta.ordering = ['-date', '-created_at']` e `verbose_name` em português.
+  - [x] 6.1.10 Gerar e aplicar migration.
 
-- [ ] **6.2 Saldo atual da conta**
-  - [ ] 6.2.1 Adicionar em `Account` a propriedade `current_balance` usando `aggregate(Sum)` das transações de entrada e de saída.
-  - [ ] 6.2.2 Tratar `None` do `aggregate` como `Decimal('0')`.
-  - [ ] 6.2.3 Exibir a coluna "Saldo atual" na listagem de contas.
+- [x] **6.2 Saldo atual da conta**
+  - [x] 6.2.1 Adicionar em `Account` a propriedade `current_balance` usando `aggregate(Sum)` das transações de entrada e de saída.
+  - [x] 6.2.2 Tratar `None` do `aggregate` como `Decimal('0')`.
+  - [x] 6.2.3 Exibir a coluna "Saldo atual" na listagem de contas.
 
-- [ ] **6.3 Proteção de exclusão**
-  - [ ] 6.3.1 No `AccountDeleteView`, sobrescrever `form_valid` capturando `ProtectedError` e exibindo "Esta conta possui transações e não pode ser excluída."
-  - [ ] 6.3.2 No `CategoryDeleteView`, capturar `ProtectedError` e exibir "Esta categoria possui transações e não pode ser excluída."
-  - [ ] 6.3.3 Redirecionar para a listagem após o erro.
+- [x] **6.3 Proteção de exclusão**
+  - [x] 6.3.1 No `AccountDeleteView`, sobrescrever `form_valid` capturando `ProtectedError` e exibindo "Esta conta possui transações e não pode ser excluída."
+  - [x] 6.3.2 No `CategoryDeleteView`, capturar `ProtectedError` e exibir "Esta categoria possui transações e não pode ser excluída."
+  - [x] 6.3.3 Redirecionar para a listagem após o erro.
 
-- [ ] **6.4 Admin de transações**
-  - [ ] 6.4.1 Registrar `Transaction` com `list_display` (`date`, `description`, `transaction_type`, `amount`, `account`, `category`), `list_filter` e `date_hierarchy = 'date'`.
+- [x] **6.4 Admin de transações**
+  - [x] 6.4.1 Registrar `Transaction` com `list_display` (`date`, `description`, `transaction_type`, `amount`, `account`, `category`), `list_filter` e `date_hierarchy = 'date'`.
 
-- [ ] **6.5 Formulário de transação**
-  - [ ] 6.5.1 Criar `TransactionForm(StyledFormMixin, ModelForm)` com campos `transaction_type`, `amount`, `date`, `description`, `account`, `category`.
-  - [ ] 6.5.2 Receber `user` no `__init__` e filtrar `account.queryset` e `category.queryset` pelo usuário.
-  - [ ] 6.5.3 Usar widget `DateInput(attrs={'type': 'date'}, format='%Y-%m-%d')` para a data.
-  - [ ] 6.5.4 Validar no `clean` que `category.category_type == transaction_type`, com mensagem "A categoria deve ser do mesmo tipo da transação."
-  - [ ] 6.5.5 Agrupar as categorias no select por tipo (`optgroup` Entradas/Saídas) para facilitar a escolha.
+- [x] **6.5 Formulário de transação**
+  - [x] 6.5.1 Criar `TransactionForm(StyledFormMixin, ModelForm)` com campos `transaction_type`, `amount`, `date`, `description`, `account`, `category`.
+  - [x] 6.5.2 Receber `user` no `__init__` e filtrar `account.queryset` e `category.queryset` pelo usuário.
+  - [x] 6.5.3 Usar widget `DateInput(attrs={'type': 'date'}, format='%Y-%m-%d')` para a data.
+  - [x] 6.5.4 Validar no `clean` que `category.category_type == transaction_type`, com mensagem "A categoria deve ser do mesmo tipo da transação."
+  - [x] 6.5.5 Agrupar as categorias no select por tipo (`optgroup` Entradas/Saídas) para facilitar a escolha.
 
-- [ ] **6.6 Filtros da listagem**
-  - [ ] 6.6.1 Criar `TransactionFilterForm(StyledFormMixin, Form)` com `start_date`, `end_date`, `transaction_type`, `account`, `category` (todos opcionais).
-  - [ ] 6.6.2 Filtrar querysets de conta e categoria do filtro pelo usuário.
-  - [ ] 6.6.3 Aplicar os filtros no `get_queryset` da `TransactionListView` quando o form for válido.
-  - [ ] 6.6.4 Usar `select_related('account', 'category')` na listagem.
+- [x] **6.6 Filtros da listagem**
+  - [x] 6.6.1 Criar `TransactionFilterForm(StyledFormMixin, Form)` com `start_date`, `end_date`, `transaction_type`, `account`, `category` (todos opcionais).
+  - [x] 6.6.2 Filtrar querysets de conta e categoria do filtro pelo usuário.
+  - [x] 6.6.3 Aplicar os filtros no `get_queryset` da `TransactionListView` quando o form for válido.
+  - [x] 6.6.4 Usar `select_related('account', 'category')` na listagem.
 
-- [ ] **6.7 Views de transações**
-  - [ ] 6.7.1 `TransactionListView` com `paginate_by = 20` e filtro no contexto.
-  - [ ] 6.7.2 Exibir no contexto o total de entradas e saídas do resultado filtrado.
-  - [ ] 6.7.3 `TransactionCreateView` com `get_form_kwargs` passando `user` e mensagem "Transação registrada com sucesso."
-  - [ ] 6.7.4 `TransactionUpdateView` com mensagem "Transação atualizada com sucesso."
-  - [ ] 6.7.5 `TransactionDeleteView` com mensagem de sucesso.
+- [x] **6.7 Views de transações**
+  - [x] 6.7.1 `TransactionListView` com `paginate_by = 20` e filtro no contexto.
+  - [x] 6.7.2 Exibir no contexto o total de entradas e saídas do resultado filtrado.
+  - [x] 6.7.3 `TransactionCreateView` com `get_form_kwargs` passando `user` e mensagem "Transação registrada com sucesso."
+  - [x] 6.7.4 `TransactionUpdateView` com mensagem "Transação atualizada com sucesso."
+  - [x] 6.7.5 `TransactionDeleteView` com mensagem de sucesso.
 
-- [ ] **6.8 URLs de transações**
-  - [ ] 6.8.1 Criar `transactions/urls.py` com `app_name = 'transactions'` e rotas list/new/edit/delete.
-  - [ ] 6.8.2 Incluir em `core/urls.py` com prefixo `transactions/`.
+- [x] **6.8 URLs de transações**
+  - [x] 6.8.1 Criar `transactions/urls.py` com `app_name = 'transactions'` e rotas list/new/edit/delete.
+  - [x] 6.8.2 Incluir em `core/urls.py` com prefixo `transactions/`.
 
-- [ ] **6.9 Templates de transações**
-  - [ ] 6.9.1 `transactions/transaction_list.html` com page header e botão "Nova transação".
-  - [ ] 6.9.2 Barra de filtros em grid responsivo com botões "Filtrar" e "Limpar".
-  - [ ] 6.9.3 Tabela com Data, Descrição, Categoria (com cor), Conta, Tipo (badge) e Valor colorido.
-  - [ ] 6.9.4 Formatar valores como R$ com separadores brasileiros (`floatformat:2` + `intcomma` / localização).
-  - [ ] 6.9.5 Cards empilhados no mobile.
-  - [ ] 6.9.6 Paginação mantendo os filtros na query string.
-  - [ ] 6.9.7 Estado vazio quando não houver transações (e mensagem específica quando o filtro não retornar resultados).
-  - [ ] 6.9.8 `transactions/transaction_form.html` com título dinâmico e aviso caso o usuário não tenha contas ou categorias, com links para cadastrá-las.
-  - [ ] 6.9.9 `transactions/transaction_confirm_delete.html` usando o componente de confirmação.
-  - [ ] 6.9.10 Adicionar link "Transações" funcional na sidebar.
+- [x] **6.9 Templates de transações**
+  - [x] 6.9.1 `transactions/transaction_list.html` com page header e botão "Nova transação".
+  - [x] 6.9.2 Barra de filtros em grid responsivo com botões "Filtrar" e "Limpar".
+  - [x] 6.9.3 Tabela com Data, Descrição, Categoria (com cor), Conta, Tipo (badge) e Valor colorido.
+  - [x] 6.9.4 Formatar valores como R$ com separadores brasileiros (`floatformat:2` + `intcomma` / localização).
+  - [x] 6.9.5 Cards empilhados no mobile.
+  - [x] 6.9.6 Paginação mantendo os filtros na query string.
+  - [x] 6.9.7 Estado vazio quando não houver transações (e mensagem específica quando o filtro não retornar resultados).
+  - [x] 6.9.8 `transactions/transaction_form.html` com título dinâmico e aviso caso o usuário não tenha contas ou categorias, com links para cadastrá-las.
+  - [x] 6.9.9 `transactions/transaction_confirm_delete.html` usando o componente de confirmação.
+  - [x] 6.9.10 Adicionar link "Transações" funcional na sidebar.
 
 ---
 

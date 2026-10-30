@@ -7,3 +7,17 @@
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
+
+/* O preflight zera o negrito do optgroup em select de lista suspensa, e o
+   Django renderiza o widget, sem espaço para utilitários no template. */
+@layer base {
+  optgroup {
+    font-weight: 700;
+    color: var(--color-slate-400);
+  }
+
+  option {
+    font-weight: 400;
+    color: var(--color-slate-100);
+  }
+}

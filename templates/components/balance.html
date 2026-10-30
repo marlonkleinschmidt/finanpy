@@ -1,0 +1,1 @@
+{% if value < 0 %}<span class="text-rose-400">− R$ {{ value|floatformat:'2g'|cut:'-' }}</span>{% else %}R$ {{ value|floatformat:'2g' }}{% endif %}

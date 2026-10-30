@@ -1,0 +1,152 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Transações | Finanpy{% endblock %}
+
+{% block content %}
+    {% url 'transactions:create' as create_url %}
+    {% url 'transactions:list' as list_url %}
+    {% include 'components/page_header.html' with title='Transações' action_url=create_url action_label='Nova transação' %}
+    {# Sem transação nenhuma a barra não tem o que filtrar; com filtro ativo ou inválido ela precisa continuar visível. #}
+    {% if transactions or has_filters or filter_form.errors %}
+        <form method="get" aria-label="Filtros" class="bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl shadow-black/20 mb-6 space-y-4">
+            {% include 'components/form_errors.html' with form=filter_form %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                {% include 'components/form_field.html' with field=filter_form.start_date %}
+                {% include 'components/form_field.html' with field=filter_form.end_date %}
+                {% include 'components/form_field.html' with field=filter_form.transaction_type %}
+                {% include 'components/form_field.html' with field=filter_form.account %}
+                {% include 'components/form_field.html' with field=filter_form.category %}
+            </div>
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+                <a href="{{ list_url }}" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-slate-800 text-slate-100 border border-slate-700 hover:bg-slate-700">Limpar</a>
+                <button type="submit" class="cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-violet-900/30 hover:opacity-90">Filtrar</button>
+            </div>
+        </form>
+    {% endif %}
+    {% if transactions %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            {% include 'components/kpi_card.html' with title='Total de entradas' value=total_income variant='income' %}
+            {% include 'components/kpi_card.html' with title='Total de saídas' value=total_expense variant='expense' %}
+        </div>
+        {# Tabela só a partir de xl: abaixo disso a sidebar fixa empurra as ações para fora da tela. #}
+        {# O wrapper usa xl:block, e não xl:table, porque overflow-x-auto não funciona em elemento com display: table. #}
+        <div class="hidden xl:block overflow-x-auto rounded-2xl border border-slate-700/50">
+            <table class="hidden xl:table min-w-full divide-y divide-slate-800 text-sm">
+                <thead>
+                    <tr>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Data</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Descrição</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Categoria</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Conta</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Tipo</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Valor</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Ações</th>
+                    </tr>
+                </thead>
+                {# O divide-y da tabela só alcança thead e tbody; as linhas precisam do próprio. #}
+                <tbody class="divide-y divide-slate-800">
+                    {% for transaction in transactions %}
+                        <tr class="bg-slate-900/50 hover:bg-slate-800/60 transition">
+                            <td class="px-4 py-3 text-slate-300 whitespace-nowrap tabular-nums">{{ transaction.date|date:'d/m/Y' }}</td>
+                            <td class="px-4 py-3 text-slate-300 max-w-48 truncate" title="{{ transaction.description }}">{{ transaction.description }}</td>
+                            <td class="px-4 py-3 text-slate-300 max-w-32">
+                                <div class="flex min-w-0 items-center gap-2">
+                                    <span class="size-3 shrink-0 rounded-full" style="background-color: {{ transaction.category.color }}" aria-hidden="true"></span>
+                                    <span class="min-w-0 truncate" title="{{ transaction.category.name }}">{{ transaction.category.name }}</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 text-slate-300 max-w-32 truncate" title="{{ transaction.account.name }}">{{ transaction.account.name }}</td>
+                            <td class="px-4 py-3 text-slate-300 whitespace-nowrap">
+                                {% if transaction.transaction_type == 'income' %}
+                                    <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/15 text-emerald-400">{{ transaction.get_transaction_type_display }}</span>
+                                {% else %}
+                                    <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-500/15 text-rose-400">{{ transaction.get_transaction_type_display }}</span>
+                                {% endif %}
+                            </td>
+                            {% if transaction.transaction_type == 'income' %}
+                                <td class="px-4 py-3 whitespace-nowrap text-emerald-400 font-semibold tabular-nums">+ R$ {{ transaction.amount|floatformat:'2g' }}</td>
+                            {% else %}
+                                <td class="px-4 py-3 whitespace-nowrap text-rose-400 font-semibold tabular-nums">− R$ {{ transaction.amount|floatformat:'2g' }}</td>
+                            {% endif %}
+                            <td class="px-4 py-3 text-slate-300">
+                                <div class="flex items-center gap-1">
+                                    <a href="{% url 'transactions:update' transaction.pk %}" aria-label="Editar transação {{ transaction.description }}" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950">
+                                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/>
+                                        </svg>
+                                    </a>
+                                    <a href="{% url 'transactions:delete' transaction.pk %}" aria-label="Excluir transação {{ transaction.description }}" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950">
+                                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="space-y-4 xl:hidden">
+            {% for transaction in transactions %}
+                <article class="bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl shadow-black/20">
+                    <div class="flex items-center justify-between gap-3">
+                        <h2 class="min-w-0 truncate text-sm font-semibold text-slate-100" title="{{ transaction.description }}">{{ transaction.description }}</h2>
+                        <div class="flex shrink-0 items-center gap-1">
+                            <a href="{% url 'transactions:update' transaction.pk %}" aria-label="Editar transação {{ transaction.description }}" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950">
+                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/>
+                                </svg>
+                            </a>
+                            <a href="{% url 'transactions:delete' transaction.pk %}" aria-label="Excluir transação {{ transaction.description }}" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950">
+                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <dl class="mt-4 space-y-2 text-sm">
+                        <div class="flex justify-between gap-4">
+                            <dt class="shrink-0 text-slate-500">Data</dt>
+                            <dd class="min-w-0 truncate text-slate-300 tabular-nums">{{ transaction.date|date:'d/m/Y' }}</dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="shrink-0 text-slate-500">Categoria</dt>
+                            <dd class="flex min-w-0 items-center gap-2 text-slate-300">
+                                <span class="size-3 shrink-0 rounded-full" style="background-color: {{ transaction.category.color }}" aria-hidden="true"></span>
+                                <span class="min-w-0 truncate" title="{{ transaction.category.name }}">{{ transaction.category.name }}</span>
+                            </dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="shrink-0 text-slate-500">Conta</dt>
+                            <dd class="min-w-0 truncate text-slate-300" title="{{ transaction.account.name }}">{{ transaction.account.name }}</dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="shrink-0 text-slate-500">Tipo</dt>
+                            <dd class="min-w-0">
+                                {% if transaction.transaction_type == 'income' %}
+                                    <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/15 text-emerald-400">{{ transaction.get_transaction_type_display }}</span>
+                                {% else %}
+                                    <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-500/15 text-rose-400">{{ transaction.get_transaction_type_display }}</span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="shrink-0 text-slate-500">Valor</dt>
+                            {% if transaction.transaction_type == 'income' %}
+                                <dd class="min-w-0 truncate text-emerald-400 font-semibold tabular-nums">+ R$ {{ transaction.amount|floatformat:'2g' }}</dd>
+                            {% else %}
+                                <dd class="min-w-0 truncate text-rose-400 font-semibold tabular-nums">− R$ {{ transaction.amount|floatformat:'2g' }}</dd>
+                            {% endif %}
+                        </div>
+                    </dl>
+                </article>
+            {% endfor %}
+        </div>
+        {% include 'components/pagination.html' %}
+    {% elif has_filters %}
+        {% include 'components/empty_state.html' with message='Nenhuma transação encontrada para os filtros selecionados.' action_url=list_url action_label='Limpar filtros' %}
+    {% else %}
+        {% include 'components/empty_state.html' with message='Você ainda não registrou nenhuma transação.' action_url=create_url action_label='Nova transação' %}
+    {% endif %}
+{% endblock %}

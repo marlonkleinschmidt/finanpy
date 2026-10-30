@@ -1,5 +1,8 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.db import models
+from django.db.models import Q, Sum
 
 from core.models import TimeStampedModel
 
@@ -39,3 +42,18 @@ class Account(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def current_balance(self):
+        # Os tipos ficam como texto para evitar import circular com
+        # transactions.models.
+        totals = self.transactions.aggregate(
+            income=Sum('amount', filter=Q(transaction_type='income')),
+            expense=Sum('amount', filter=Q(transaction_type='expense')),
+        )
+        income = totals['income'] or Decimal('0')
+        expense = totals['expense'] or Decimal('0')
+        # No SQLite o Sum volta com 15 dígitos significativos, sem arredondar
+        # para as casas decimais do campo.
+        balance = self.initial_balance + income - expense
+        return balance.quantize(Decimal('0.01'))

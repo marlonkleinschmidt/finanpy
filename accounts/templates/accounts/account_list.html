@@ -6,15 +6,17 @@
     {% url 'accounts:create' as create_url %}
     {% include 'components/page_header.html' with title='Contas' action_url=create_url action_label='Nova conta' %}
     {% if accounts %}
-        {# O wrapper usa md:block, e não md:table, porque overflow-x-auto não funciona em elemento com display: table. #}
-        <div class="hidden md:block overflow-x-auto rounded-2xl border border-slate-700/50">
-            <table class="hidden md:table min-w-full divide-y divide-slate-800 text-sm">
+        {# Tabela só a partir de xl: abaixo disso a sidebar fixa empurra as ações para fora da tela. #}
+        {# O wrapper usa xl:block, e não xl:table, porque overflow-x-auto não funciona em elemento com display: table. #}
+        <div class="hidden xl:block overflow-x-auto rounded-2xl border border-slate-700/50">
+            <table class="hidden xl:table min-w-full divide-y divide-slate-800 text-sm">
                 <thead>
                     <tr>
                         <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Nome</th>
                         <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Banco</th>
                         <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Tipo</th>
                         <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Saldo inicial</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Saldo atual</th>
                         <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Ações</th>
                     </tr>
                 </thead>
@@ -22,10 +24,11 @@
                 <tbody class="divide-y divide-slate-800">
                     {% for account in accounts %}
                         <tr class="bg-slate-900/50 hover:bg-slate-800/60 transition">
-                            <td class="px-4 py-3 text-slate-300 max-w-32 xl:max-w-64 truncate" title="{{ account.name }}">{{ account.name }}</td>
-                            <td class="px-4 py-3 text-slate-300 max-w-32 xl:max-w-64 truncate" title="{{ account.bank_name }}">{{ account.bank_name|default:'—' }}</td>
+                            <td class="px-4 py-3 text-slate-300 max-w-48 truncate" title="{{ account.name }}">{{ account.name }}</td>
+                            <td class="px-4 py-3 text-slate-300 max-w-48 truncate" title="{{ account.bank_name }}">{{ account.bank_name|default:'—' }}</td>
                             <td class="px-4 py-3 text-slate-300 whitespace-nowrap">{{ account.get_account_type_display }}</td>
-                            <td class="px-4 py-3 text-slate-300 whitespace-nowrap tabular-nums">R$ {{ account.initial_balance|floatformat:'2g' }}</td>
+                            <td class="px-4 py-3 text-slate-300 whitespace-nowrap tabular-nums">{% include 'components/balance.html' with value=account.initial_balance %}</td>
+                            <td class="px-4 py-3 text-slate-100 font-semibold whitespace-nowrap tabular-nums">{% include 'components/balance.html' with value=account.current_balance %}</td>
                             <td class="px-4 py-3 text-slate-300">
                                 <div class="flex items-center gap-1">
                                     <a href="{% url 'accounts:update' account.pk %}" aria-label="Editar conta {{ account.name }}" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950">
@@ -45,7 +48,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="space-y-4 md:hidden">
+        <div class="space-y-4 xl:hidden">
             {% for account in accounts %}
                 <article class="bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl shadow-black/20">
                     <div class="flex items-center justify-between gap-3">
@@ -74,7 +77,11 @@
                         </div>
                         <div class="flex justify-between gap-4">
                             <dt class="shrink-0 text-slate-500">Saldo inicial</dt>
-                            <dd class="min-w-0 truncate text-slate-300 tabular-nums">R$ {{ account.initial_balance|floatformat:'2g' }}</dd>
+                            <dd class="min-w-0 truncate text-slate-300 tabular-nums">{% include 'components/balance.html' with value=account.initial_balance %}</dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="shrink-0 text-slate-500">Saldo atual</dt>
+                            <dd class="min-w-0 truncate text-slate-100 font-semibold tabular-nums">{% include 'components/balance.html' with value=account.current_balance %}</dd>
                         </div>
                     </dl>
                 </article>

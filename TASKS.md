@@ -174,32 +174,32 @@
 
 ---
 
-### Sprint 3 — Perfil
+### [x] Sprint 3 — Perfil
 
-- [ ] **3.1 Model `Profile`**
-  - [ ] 3.1.1 Em `profiles/models.py`, criar `Profile(TimeStampedModel)`.
-  - [ ] 3.1.2 Adicionar `user = OneToOneField(settings.AUTH_USER_MODEL, on_delete=CASCADE, related_name='profile')`.
-  - [ ] 3.1.3 Adicionar `phone = CharField('Telefone', max_length=20, blank=True)`.
-  - [ ] 3.1.4 Implementar `__str__` e `verbose_name` em português.
-  - [ ] 3.1.5 Gerar e aplicar migration.
+- [x] **3.1 Model `Profile`**
+  - [x] 3.1.1 Em `profiles/models.py`, criar `Profile(TimeStampedModel)`.
+  - [x] 3.1.2 Adicionar `user = OneToOneField(settings.AUTH_USER_MODEL, on_delete=CASCADE, related_name='profile')`.
+  - [x] 3.1.3 Adicionar `phone = CharField('Telefone', max_length=20, blank=True)`.
+  - [x] 3.1.4 Implementar `__str__` e `verbose_name` em português.
+  - [x] 3.1.5 Gerar e aplicar migration.
 
-- [ ] **3.2 Signal de criação de perfil**
-  - [ ] 3.2.1 Criar `profiles/signals.py` com receiver `post_save` do `User`.
-  - [ ] 3.2.2 Criar o `Profile` quando `created` for `True`.
-  - [ ] 3.2.3 Registrar os signals no método `ready()` de `ProfilesConfig` em `profiles/apps.py`.
-  - [ ] 3.2.4 Testar manualmente: cadastrar usuário e verificar perfil criado no admin.
-  - [ ] 3.2.5 Criar perfis para usuários já existentes (ex.: superusuário) via shell ou migration de dados simples.
+- [x] **3.2 Signal de criação de perfil**
+  - [x] 3.2.1 Criar `profiles/signals.py` com receiver `post_save` do `User`.
+  - [x] 3.2.2 Criar o `Profile` quando `created` for `True`.
+  - [x] 3.2.3 Registrar os signals no método `ready()` de `ProfilesConfig` em `profiles/apps.py`.
+  - [x] 3.2.4 Testar manualmente: cadastrar usuário e verificar perfil criado no admin.
+  - [x] 3.2.5 Criar perfis para usuários já existentes (ex.: superusuário) via shell ou migration de dados simples.
 
-- [ ] **3.3 Admin de perfil**
-  - [ ] 3.3.1 Registrar `Profile` no admin com `list_display` (`user`, `phone`, `created_at`).
+- [x] **3.3 Admin de perfil**
+  - [x] 3.3.1 Registrar `Profile` no admin com `list_display` (`user`, `phone`, `created_at`).
 
-- [ ] **3.4 Edição de perfil**
-  - [ ] 3.4.1 Criar `profiles/forms.py` com `UserUpdateForm` (first_name, last_name) e `ProfileForm` (phone), ambos com `StyledFormMixin`.
-  - [ ] 3.4.2 Criar `ProfileUpdateView(LoginRequiredMixin, UpdateView)` baseada em `Profile`, com `get_object` retornando `self.request.user.profile`.
-  - [ ] 3.4.3 Incluir o `UserUpdateForm` no contexto e salvá-lo junto no `post`/`form_valid`.
-  - [ ] 3.4.4 Exibir mensagem "Perfil atualizado com sucesso." (`SuccessMessageMixin`).
-  - [ ] 3.4.5 Criar `profiles/urls.py` com rota `profile/` (name `profile`) e incluir no `core/urls.py`.
-  - [ ] 3.4.6 Criar template `profiles/profile_form.html` estendendo `base_auth.html`, com e-mail exibido somente leitura.
+- [x] **3.4 Edição de perfil**
+  - [x] 3.4.1 Criar `profiles/forms.py` com `UserUpdateForm` (first_name, last_name) e `ProfileForm` (phone), ambos com `StyledFormMixin`.
+  - [x] 3.4.2 Criar `ProfileUpdateView(LoginRequiredMixin, UpdateView)` baseada em `Profile`, com `get_object` retornando `self.request.user.profile`.
+  - [x] 3.4.3 Incluir o `UserUpdateForm` no contexto e salvá-lo junto no `post`/`form_valid`.
+  - [x] 3.4.4 Exibir mensagem "Perfil atualizado com sucesso." (`SuccessMessageMixin`).
+  - [x] 3.4.5 Criar `profiles/urls.py` com rota `profile/` (name `profile`) e incluir no `core/urls.py`.
+  - [x] 3.4.6 Criar template `profiles/profile_form.html` estendendo `base_auth.html`, com e-mail exibido somente leitura.
 
 ---
 

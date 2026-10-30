@@ -54,55 +54,55 @@
 
 ### Sprint 1 — Usuário customizado e autenticação
 
-- [ ] **1.1 Criar model base com timestamps**
-  - [ ] 1.1.1 Decidir local do model abstrato `TimeStampedModel` (`core/models.py`).
-  - [ ] 1.1.2 Implementar `TimeStampedModel` com `created_at = DateTimeField(auto_now_add=True)` e `updated_at = DateTimeField(auto_now=True)`, `class Meta: abstract = True`.
-  - [ ] 1.1.3 Definir `verbose_name` em português para os campos (`'Criado em'`, `'Atualizado em'`).
+- [x] **1.1 Criar model base com timestamps**
+  - [x] 1.1.1 Decidir local do model abstrato `TimeStampedModel` (`core/models.py`).
+  - [x] 1.1.2 Implementar `TimeStampedModel` com `created_at = DateTimeField(auto_now_add=True)` e `updated_at = DateTimeField(auto_now=True)`, `class Meta: abstract = True`.
+  - [x] 1.1.3 Definir `verbose_name` em português para os campos (`'Criado em'`, `'Atualizado em'`).
 
-- [ ] **1.2 Criar model `User` customizado**
-  - [ ] 1.2.1 Em `users/models.py`, criar `UserManager(BaseUserManager)` com `create_user(email, password, **extra_fields)` normalizando o e-mail.
-  - [ ] 1.2.2 Implementar `create_superuser` definindo `is_staff` e `is_superuser` como `True`.
-  - [ ] 1.2.3 Criar `User(AbstractUser, TimeStampedModel)` com `username = None`.
-  - [ ] 1.2.4 Definir `email = models.EmailField('E-mail', unique=True)`.
-  - [ ] 1.2.5 Definir `USERNAME_FIELD = 'email'` e `REQUIRED_FIELDS = ['first_name', 'last_name']`.
-  - [ ] 1.2.6 Atribuir `objects = UserManager()`.
-  - [ ] 1.2.7 Implementar `__str__` retornando o e-mail e `verbose_name` em português.
-  - [ ] 1.2.8 Definir `AUTH_USER_MODEL = 'users.User'` no settings.
+- [x] **1.2 Criar model `User` customizado**
+  - [x] 1.2.1 Em `users/models.py`, criar `UserManager(BaseUserManager)` com `create_user(email, password, **extra_fields)` normalizando o e-mail.
+  - [x] 1.2.2 Implementar `create_superuser` definindo `is_staff` e `is_superuser` como `True`.
+  - [x] 1.2.3 Criar `User(AbstractUser, TimeStampedModel)` com `username = None`.
+  - [x] 1.2.4 Definir `email = models.EmailField('E-mail', unique=True)`.
+  - [x] 1.2.5 Definir `USERNAME_FIELD = 'email'` e `REQUIRED_FIELDS = ['first_name', 'last_name']`.
+  - [x] 1.2.6 Atribuir `objects = UserManager()`.
+  - [x] 1.2.7 Implementar `__str__` retornando o e-mail e `verbose_name` em português.
+  - [x] 1.2.8 Definir `AUTH_USER_MODEL = 'users.User'` no settings.
 
-- [ ] **1.3 Primeiras migrations**
-  - [ ] 1.3.1 Executar `python manage.py makemigrations users`.
-  - [ ] 1.3.2 Executar `python manage.py migrate`.
-  - [ ] 1.3.3 Criar superusuário com `createsuperuser` e confirmar que o prompt pede e-mail.
+- [x] **1.3 Primeiras migrations**
+  - [x] 1.3.1 Executar `python manage.py makemigrations users`.
+  - [x] 1.3.2 Executar `python manage.py migrate`.
+  - [x] 1.3.3 Criar superusuário com `createsuperuser` e confirmar que o prompt pede e-mail.
 
-- [ ] **1.4 Admin de usuários**
-  - [ ] 1.4.1 Em `users/admin.py`, criar `UserAdmin` herdando de `django.contrib.auth.admin.UserAdmin`.
-  - [ ] 1.4.2 Ajustar `ordering`, `list_display` (`email`, `first_name`, `last_name`, `is_staff`) e `search_fields` sem `username`.
-  - [ ] 1.4.3 Ajustar `fieldsets` e `add_fieldsets` substituindo `username` por `email`.
-  - [ ] 1.4.4 Validar login no `/admin/` com e-mail.
+- [x] **1.4 Admin de usuários**
+  - [x] 1.4.1 Em `users/admin.py`, criar `UserAdmin` herdando de `django.contrib.auth.admin.UserAdmin`.
+  - [x] 1.4.2 Ajustar `ordering`, `list_display` (`email`, `first_name`, `last_name`, `is_staff`) e `search_fields` sem `username`.
+  - [x] 1.4.3 Ajustar `fieldsets` e `add_fieldsets` substituindo `username` por `email`.
+  - [x] 1.4.4 Validar login no `/admin/` com e-mail.
 
-- [ ] **1.5 Formulários de autenticação**
-  - [ ] 1.5.1 Criar `users/forms.py`.
-  - [ ] 1.5.2 Criar `SignUpForm(UserCreationForm)` com `Meta.model = User` e `fields = ('first_name', 'last_name', 'email')`.
-  - [ ] 1.5.3 Definir labels em português para todos os campos.
-  - [ ] 1.5.4 Criar `EmailAuthenticationForm(AuthenticationForm)` com label do campo `username` como `'E-mail'` e widget `EmailInput`.
-  - [ ] 1.5.5 Personalizar mensagem `invalid_login` para `'E-mail ou senha inválidos.'`.
+- [x] **1.5 Formulários de autenticação**
+  - [x] 1.5.1 Criar `users/forms.py`.
+  - [x] 1.5.2 Criar `SignUpForm(UserCreationForm)` com `Meta.model = User` e `fields = ('first_name', 'last_name', 'email')`.
+  - [x] 1.5.3 Definir labels em português para todos os campos.
+  - [x] 1.5.4 Criar `EmailAuthenticationForm(AuthenticationForm)` com label do campo `username` como `'E-mail'` e widget `EmailInput`.
+  - [x] 1.5.5 Personalizar mensagem `invalid_login` para `'E-mail ou senha inválidos.'`.
 
-- [ ] **1.6 Views de autenticação**
-  - [ ] 1.6.1 Criar `SignUpView(CreateView)` com `form_class = SignUpForm` e `template_name = 'users/signup.html'`.
-  - [ ] 1.6.2 Sobrescrever `form_valid` para salvar o usuário e chamar `login(self.request, user)`.
-  - [ ] 1.6.3 Redirecionar para o dashboard (`success_url = reverse_lazy('dashboard')`).
-  - [ ] 1.6.4 Redirecionar usuário já autenticado que acessar o cadastro para o dashboard (sobrescrever `dispatch`).
-  - [ ] 1.6.5 Criar `SignInView(LoginView)` com `authentication_form = EmailAuthenticationForm`, `template_name = 'users/login.html'` e `redirect_authenticated_user = True`.
-  - [ ] 1.6.6 Usar `LogoutView` nativa.
+- [x] **1.6 Views de autenticação**
+  - [x] 1.6.1 Criar `SignUpView(CreateView)` com `form_class = SignUpForm` e `template_name = 'users/signup.html'`.
+  - [x] 1.6.2 Sobrescrever `form_valid` para salvar o usuário e chamar `login(self.request, user)`.
+  - [x] 1.6.3 Redirecionar para o dashboard (`success_url = reverse_lazy('dashboard')`).
+  - [x] 1.6.4 Redirecionar usuário já autenticado que acessar o cadastro para o dashboard (sobrescrever `dispatch`).
+  - [x] 1.6.5 Criar `SignInView(LoginView)` com `authentication_form = EmailAuthenticationForm`, `template_name = 'users/login.html'` e `redirect_authenticated_user = True`.
+  - [x] 1.6.6 Usar `LogoutView` nativa.
 
-- [ ] **1.7 URLs e settings de autenticação**
-  - [ ] 1.7.1 Criar `users/urls.py` com rotas `signup/`, `login/` e `logout/` (names: `signup`, `login`, `logout`).
-  - [ ] 1.7.2 Incluir `users.urls` em `core/urls.py`.
-  - [ ] 1.7.3 Definir `LOGIN_URL = 'login'`, `LOGIN_REDIRECT_URL = 'dashboard'` e `LOGOUT_REDIRECT_URL = 'home'`.
+- [x] **1.7 URLs e settings de autenticação**
+  - [x] 1.7.1 Criar `users/urls.py` com rotas `signup/`, `login/` e `logout/` (names: `signup`, `login`, `logout`).
+  - [x] 1.7.2 Incluir `users.urls` em `core/urls.py`.
+  - [x] 1.7.3 Definir `LOGIN_URL = 'login'`, `LOGIN_REDIRECT_URL = 'dashboard'` e `LOGOUT_REDIRECT_URL = 'home'`.
 
 - [ ] **1.8 Templates provisórios de autenticação**
-  - [ ] 1.8.1 Criar `users/templates/users/signup.html` com formulário simples (será estilizado na Sprint 2).
-  - [ ] 1.8.2 Criar `users/templates/users/login.html` com formulário simples.
+  - [x] 1.8.1 Criar `users/templates/users/signup.html` com formulário simples (será estilizado na Sprint 2).
+  - [x] 1.8.2 Criar `users/templates/users/login.html` com formulário simples.
   - [ ] 1.8.3 Testar manualmente cadastro, login com e-mail e logout.
 
 ---

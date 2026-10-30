@@ -26,18 +26,28 @@
   - [x] 0.3.6 Registrar todas as apps em `INSTALLED_APPS` em `core/settings.py`.
   - [x] 0.3.7 Adicionar `django.contrib.humanize` em `INSTALLED_APPS`.
 
-- [ ] **0.4 Configurar settings globais**
-  - [ ] 0.4.1 Definir `LANGUAGE_CODE = 'pt-br'`.
-  - [ ] 0.4.2 Definir `TIME_ZONE = 'America/Sao_Paulo'` e `USE_TZ = True`.
-  - [ ] 0.4.3 Configurar `TEMPLATES['DIRS'] = [BASE_DIR / 'templates']`.
-  - [ ] 0.4.4 Configurar `STATIC_URL = 'static/'` e `STATICFILES_DIRS = [BASE_DIR / 'static']`.
-  - [ ] 0.4.5 Confirmar banco SQLite padrão em `DATABASES`.
-  - [ ] 0.4.6 Criar as pastas `templates/`, `templates/components/` e `static/css/`.
-  - [ ] 0.4.7 Revisar `settings.py` garantindo aspas simples e PEP 8.
+- [x] **0.4 Configurar settings globais e variáveis de ambiente**
+  - [x] 0.4.1 Criar o arquivo `.env` na raiz do projeto com `SECRET_KEY`, `DEBUG` e `ALLOWED_HOSTS` (já ignorado pelo `.gitignore`).
+  - [x] 0.4.2 Criar `.env.example` versionado, com as mesmas variáveis e sem segredos.
+  - [x] 0.4.3 Carregar o `.env` em `core/settings.py` apenas com a biblioteca padrão (`os.environ`), sem dependências novas, dividindo cada linha só no primeiro `=` e sem sobrescrever variáveis já definidas no ambiente.
+  - [x] 0.4.4 Mover `SECRET_KEY` para o `.env`, sem valor padrão no código, gerando uma nova chave com `get_random_secret_key()` (a atual já está no histórico do Git).
+  - [x] 0.4.5 Configurar `DEBUG` por variável de ambiente, com padrão `False` (`os.environ.get('DEBUG', 'False') == 'True'`).
+  - [x] 0.4.6 Configurar `ALLOWED_HOSTS` por variável de ambiente, separada por vírgulas (`localhost,127.0.0.1` em desenvolvimento).
+  - [x] 0.4.7 Criar `pyproject.toml` com a configuração de aspas simples do ruff (`[tool.ruff.lint.flake8-quotes] inline-quotes = 'single'` e `[tool.ruff.format] quote-style = 'single'`).
+  - [x] 0.4.8 Definir `LANGUAGE_CODE = 'pt-br'`.
+  - [x] 0.4.9 Definir `TIME_ZONE = 'America/Sao_Paulo'`.
+  - [x] 0.4.10 Definir `USE_I18N = True`.
+  - [x] 0.4.11 Definir `USE_TZ = True`.
+  - [x] 0.4.12 Configurar `TEMPLATES['DIRS'] = [BASE_DIR / 'templates']`.
+  - [x] 0.4.13 Configurar `STATIC_URL = 'static/'` e `STATICFILES_DIRS = [BASE_DIR / 'static']`.
+  - [x] 0.4.14 Confirmar banco SQLite padrão em `DATABASES`.
+  - [x] 0.4.15 Criar as pastas `templates/`, `templates/components/` e `static/css/`.
+  - [x] 0.4.16 Revisar `settings.py` garantindo aspas simples e PEP 8.
+  - [x] 0.4.17 Atualizar `docs/setup.md` com o passo de copiar `.env.example` para `.env` antes de rodar o projeto.
 
 - [ ] **0.5 Ferramentas de padronização de código**
   - [ ] 0.5.1 Instalar `ruff` como dependência de desenvolvimento.
-  - [ ] 0.5.2 Criar `pyproject.toml` com configuração do ruff (regra de aspas simples via `flake8-quotes`/`Q`, line-length 79, PEP 8).
+  - [ ] 0.5.2 Completar o `pyproject.toml` criado na tarefa 0.4.7 com as regras do ruff (`Q`, line-length 79, PEP 8).
   - [ ] 0.5.3 Executar `ruff check .` e corrigir os apontamentos do código gerado.
 
 ---
@@ -380,7 +390,7 @@
   - [ ] 8.1.1 Verificar que todas as views autenticadas usam `LoginRequiredMixin`.
   - [ ] 8.1.2 Testar manualmente o acesso por URL a objetos de outro usuário (deve retornar 404) em contas, categorias e transações.
   - [ ] 8.1.3 Verificar que o logout é feito via POST.
-  - [ ] 8.1.4 Mover `SECRET_KEY` e `DEBUG` para variáveis de ambiente (`os.environ.get`) com valores padrão de desenvolvimento.
+  - [ ] 8.1.4 Verificar que `SECRET_KEY`, `DEBUG` e `ALLOWED_HOSTS` continuam vindo do `.env` (tarefa 0.4) e que nenhum segredo está versionado.
 
 - [ ] **8.2 Revisão de interface**
   - [ ] 8.2.1 Revisar todos os textos da interface em português brasileiro.
@@ -490,18 +500,28 @@
   - [x] 0.3.6 Registrar todas as apps em `INSTALLED_APPS` em `core/settings.py`.
   - [x] 0.3.7 Adicionar `django.contrib.humanize` em `INSTALLED_APPS`.
 
-- [ ] **0.4 Configurar settings globais**
-  - [ ] 0.4.1 Definir `LANGUAGE_CODE = 'pt-br'`.
-  - [ ] 0.4.2 Definir `TIME_ZONE = 'America/Sao_Paulo'` e `USE_TZ = True`.
-  - [ ] 0.4.3 Configurar `TEMPLATES['DIRS'] = [BASE_DIR / 'templates']`.
-  - [ ] 0.4.4 Configurar `STATIC_URL = 'static/'` e `STATICFILES_DIRS = [BASE_DIR / 'static']`.
-  - [ ] 0.4.5 Confirmar banco SQLite padrão em `DATABASES`.
-  - [ ] 0.4.6 Criar as pastas `templates/`, `templates/components/` e `static/css/`.
-  - [ ] 0.4.7 Revisar `settings.py` garantindo aspas simples e PEP 8.
+- [x] **0.4 Configurar settings globais e variáveis de ambiente**
+  - [x] 0.4.1 Criar o arquivo `.env` na raiz do projeto com `SECRET_KEY`, `DEBUG` e `ALLOWED_HOSTS` (já ignorado pelo `.gitignore`).
+  - [x] 0.4.2 Criar `.env.example` versionado, com as mesmas variáveis e sem segredos.
+  - [x] 0.4.3 Carregar o `.env` em `core/settings.py` apenas com a biblioteca padrão (`os.environ`), sem dependências novas, dividindo cada linha só no primeiro `=` e sem sobrescrever variáveis já definidas no ambiente.
+  - [x] 0.4.4 Mover `SECRET_KEY` para o `.env`, sem valor padrão no código, gerando uma nova chave com `get_random_secret_key()` (a atual já está no histórico do Git).
+  - [x] 0.4.5 Configurar `DEBUG` por variável de ambiente, com padrão `False` (`os.environ.get('DEBUG', 'False') == 'True'`).
+  - [x] 0.4.6 Configurar `ALLOWED_HOSTS` por variável de ambiente, separada por vírgulas (`localhost,127.0.0.1` em desenvolvimento).
+  - [x] 0.4.7 Criar `pyproject.toml` com a configuração de aspas simples do ruff (`[tool.ruff.lint.flake8-quotes] inline-quotes = 'single'` e `[tool.ruff.format] quote-style = 'single'`).
+  - [x] 0.4.8 Definir `LANGUAGE_CODE = 'pt-br'`.
+  - [x] 0.4.9 Definir `TIME_ZONE = 'America/Sao_Paulo'`.
+  - [x] 0.4.10 Definir `USE_I18N = True`.
+  - [x] 0.4.11 Definir `USE_TZ = True`.
+  - [x] 0.4.12 Configurar `TEMPLATES['DIRS'] = [BASE_DIR / 'templates']`.
+  - [x] 0.4.13 Configurar `STATIC_URL = 'static/'` e `STATICFILES_DIRS = [BASE_DIR / 'static']`.
+  - [x] 0.4.14 Confirmar banco SQLite padrão em `DATABASES`.
+  - [x] 0.4.15 Criar as pastas `templates/`, `templates/components/` e `static/css/`.
+  - [x] 0.4.16 Revisar `settings.py` garantindo aspas simples e PEP 8.
+  - [x] 0.4.17 Atualizar `docs/setup.md` com o passo de copiar `.env.example` para `.env` antes de rodar o projeto.
 
 - [ ] **0.5 Ferramentas de padronização de código**
   - [ ] 0.5.1 Instalar `ruff` como dependência de desenvolvimento.
-  - [ ] 0.5.2 Criar `pyproject.toml` com configuração do ruff (regra de aspas simples via `flake8-quotes`/`Q`, line-length 79, PEP 8).
+  - [ ] 0.5.2 Completar o `pyproject.toml` criado na tarefa 0.4.7 com as regras do ruff (`Q`, line-length 79, PEP 8).
   - [ ] 0.5.3 Executar `ruff check .` e corrigir os apontamentos do código gerado.
 
 ---
@@ -844,7 +864,7 @@
   - [ ] 8.1.1 Verificar que todas as views autenticadas usam `LoginRequiredMixin`.
   - [ ] 8.1.2 Testar manualmente o acesso por URL a objetos de outro usuário (deve retornar 404) em contas, categorias e transações.
   - [ ] 8.1.3 Verificar que o logout é feito via POST.
-  - [ ] 8.1.4 Mover `SECRET_KEY` e `DEBUG` para variáveis de ambiente (`os.environ.get`) com valores padrão de desenvolvimento.
+  - [ ] 8.1.4 Verificar que `SECRET_KEY`, `DEBUG` e `ALLOWED_HOSTS` continuam vindo do `.env` (tarefa 0.4) e que nenhum segredo está versionado.
 
 - [ ] **8.2 Revisão de interface**
   - [ ] 8.2.1 Revisar todos os textos da interface em português brasileiro.

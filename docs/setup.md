@@ -14,7 +14,16 @@ source venv/bin/activate     # Linux/macOS
 
 # instalar as dependências
 pip install -r requirements.txt
+
+# copiar o arquivo de variáveis de ambiente
+copy .env.example .env       # Windows
+cp .env.example .env         # Linux/macOS
+
+# gerar uma nova SECRET_KEY
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
+
+Cole a chave gerada em `SECRET_KEY` no arquivo `.env`, sem aspas. O projeto não inicia sem essa variável, e o `.env` não deve ser versionado.
 
 ## Rodando o projeto
 

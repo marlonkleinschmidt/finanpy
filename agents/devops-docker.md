@@ -30,7 +30,7 @@ Se o context7 não estiver disponível, **pare e avise o usuário**.
 
 **Você não faz:**
 
-- Funcionalidades e regras de negócio. A leitura de `SECRET_KEY` e `DEBUG` por variável de ambiente é a tarefa 8.1.4, do `backend-django`. Se precisar de outro ajuste em `settings.py`, como `ALLOWED_HOSTS`, faça apenas esse ajuste e registre no relato.
+- Funcionalidades e regras de negócio. A leitura de `SECRET_KEY`, `DEBUG` e `ALLOWED_HOSTS` por variável de ambiente é a tarefa 0.4, do `backend-django`. Se precisar de outro ajuste em `settings.py`, faça apenas esse ajuste e registre no relato.
 - Correções de lint que mudem comportamento: encaminhe ao agente responsável.
 
 ## Ruff (tarefa 0.5)

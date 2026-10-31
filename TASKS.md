@@ -412,49 +412,49 @@
 
 ---
 
-### Sprint 9 — Testes automatizados
+### [x] Sprint 9 — Testes automatizados
 
-- [ ] **9.1 Testes de usuários e autenticação** (`users/tests.py`)
-  - [ ] 9.1.1 Testar `create_user` com e-mail e senha.
-  - [ ] 9.1.2 Testar `create_superuser` com flags corretas.
-  - [ ] 9.1.3 Testar que e-mail duplicado é rejeitado.
-  - [ ] 9.1.4 Testar cadastro via view: cria usuário, autentica e redireciona ao dashboard.
-  - [ ] 9.1.5 Testar login com e-mail correto e com senha incorreta.
-  - [ ] 9.1.6 Testar logout redirecionando à landing.
+- [x] **9.1 Testes de usuários e autenticação** (`users/tests.py`)
+  - [x] 9.1.1 Testar `create_user` com e-mail e senha.
+  - [x] 9.1.2 Testar `create_superuser` com flags corretas.
+  - [x] 9.1.3 Testar que e-mail duplicado é rejeitado.
+  - [x] 9.1.4 Testar cadastro via view: cria usuário, autentica e redireciona ao dashboard.
+  - [x] 9.1.5 Testar login com e-mail correto e com senha incorreta.
+  - [x] 9.1.6 Testar logout redirecionando à landing.
 
-- [ ] **9.2 Testes de perfil** (`profiles/tests.py`)
-  - [ ] 9.2.1 Testar que o signal cria o perfil ao criar um usuário.
-  - [ ] 9.2.2 Testar edição de perfil e de nome do usuário.
+- [x] **9.2 Testes de perfil** (`profiles/tests.py`)
+  - [x] 9.2.1 Testar que o signal cria o perfil ao criar um usuário.
+  - [x] 9.2.2 Testar edição de perfil e de nome do usuário.
 
-- [ ] **9.3 Testes de contas** (`accounts/tests.py`)
-  - [ ] 9.3.1 Testar CRUD de contas pelo usuário dono.
-  - [ ] 9.3.2 Testar que outro usuário recebe 404 ao acessar/editar/excluir.
-  - [ ] 9.3.3 Testar cálculo de `current_balance` com entradas e saídas.
-  - [ ] 9.3.4 Testar bloqueio de exclusão de conta com transações.
+- [x] **9.3 Testes de contas** (`accounts/tests.py`)
+  - [x] 9.3.1 Testar CRUD de contas pelo usuário dono.
+  - [x] 9.3.2 Testar que outro usuário recebe 404 ao acessar/editar/excluir.
+  - [x] 9.3.3 Testar cálculo de `current_balance` com entradas e saídas.
+  - [x] 9.3.4 Testar bloqueio de exclusão de conta com transações.
 
-- [ ] **9.4 Testes de categorias** (`categories/tests.py`)
-  - [ ] 9.4.1 Testar CRUD de categorias.
-  - [ ] 9.4.2 Testar validação de duplicidade de nome + tipo.
-  - [ ] 9.4.3 Testar isolamento entre usuários.
-  - [ ] 9.4.4 Testar bloqueio de exclusão de categoria com transações.
+- [x] **9.4 Testes de categorias** (`categories/tests.py`)
+  - [x] 9.4.1 Testar CRUD de categorias.
+  - [x] 9.4.2 Testar validação de duplicidade de nome + tipo.
+  - [x] 9.4.3 Testar isolamento entre usuários.
+  - [x] 9.4.4 Testar bloqueio de exclusão de categoria com transações.
 
-- [ ] **9.5 Testes de transações** (`transactions/tests.py`)
-  - [ ] 9.5.1 Testar CRUD de transações.
-  - [ ] 9.5.2 Testar validação de valor maior que zero.
-  - [ ] 9.5.3 Testar validação de tipo da categoria igual ao tipo da transação.
-  - [ ] 9.5.4 Testar que o form só exibe contas e categorias do usuário.
-  - [ ] 9.5.5 Testar filtros por período, tipo, conta e categoria.
-  - [ ] 9.5.6 Testar isolamento entre usuários.
+- [x] **9.5 Testes de transações** (`transactions/tests.py`)
+  - [x] 9.5.1 Testar CRUD de transações.
+  - [x] 9.5.2 Testar validação de valor maior que zero.
+  - [x] 9.5.3 Testar validação de tipo da categoria igual ao tipo da transação.
+  - [x] 9.5.4 Testar que o form só exibe contas e categorias do usuário.
+  - [x] 9.5.5 Testar filtros por período, tipo, conta e categoria.
+  - [x] 9.5.6 Testar isolamento entre usuários.
 
-- [ ] **9.6 Testes de core**
-  - [ ] 9.6.1 Testar que a landing é pública (status 200).
-  - [ ] 9.6.2 Testar que o dashboard exige login (redireciona ao login).
-  - [ ] 9.6.3 Testar os valores de KPIs do dashboard com dados conhecidos.
+- [x] **9.6 Testes de core**
+  - [x] 9.6.1 Testar que a landing é pública (status 200).
+  - [x] 9.6.2 Testar que o dashboard exige login (redireciona ao login).
+  - [x] 9.6.3 Testar os valores de KPIs do dashboard com dados conhecidos.
 
-- [ ] **9.7 Cobertura**
-  - [ ] 9.7.1 Instalar `coverage` como dependência de desenvolvimento.
-  - [ ] 9.7.2 Executar `coverage run manage.py test` e `coverage report`.
-  - [ ] 9.7.3 Atingir cobertura mínima de 80%.
+- [x] **9.7 Cobertura**
+  - [x] 9.7.1 Instalar `coverage` como dependência de desenvolvimento.
+  - [x] 9.7.2 Executar `coverage run manage.py test` e `coverage report`.
+  - [x] 9.7.3 Atingir cobertura mínima de 80%.
 
 ---
 

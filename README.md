@@ -30,7 +30,7 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-Instale as dependências. O `requirements-dev.txt` inclui o `requirements.txt` e adiciona o `ruff`, usado apenas no desenvolvimento:
+Instale as dependências. O `requirements-dev.txt` inclui o `requirements.txt` e adiciona o `ruff` e o `coverage`, usados apenas no desenvolvimento:
 
 ```powershell
 pip install -r requirements-dev.txt
@@ -111,6 +111,15 @@ ruff check .
 Para rodar um único teste, informe o caminho dele, por exemplo `python manage.py test users.tests`.
 
 O `ruff` é configurado no `pyproject.toml` e vem do `requirements-dev.txt`.
+
+Para medir a cobertura dos testes:
+
+```powershell
+coverage run manage.py test
+coverage report
+```
+
+O `coverage` também é configurado no `pyproject.toml` e vem do `requirements-dev.txt`. A medição ignora testes e migrations, e o `coverage report` termina com erro se a cobertura ficar abaixo de 80%.
 
 ## Dependências
 

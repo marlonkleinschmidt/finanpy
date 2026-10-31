@@ -15,7 +15,7 @@ source venv/bin/activate     # Linux/macOS
 # instalar as dependências
 pip install -r requirements.txt
 
-# instalar também as ferramentas de desenvolvimento (ruff)
+# instalar também as ferramentas de desenvolvimento (ruff e coverage)
 pip install -r requirements-dev.txt
 
 # copiar o arquivo de variáveis de ambiente

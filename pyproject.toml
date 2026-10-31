@@ -10,3 +10,11 @@ inline-quotes = 'single'
 
 [tool.ruff.format]
 quote-style = 'single'
+
+[tool.coverage.run]
+source = ['.']
+omit = ['venv/*', '*/migrations/*', '*/tests.py', 'manage.py']
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true

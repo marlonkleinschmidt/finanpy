@@ -24,8 +24,8 @@
                 <tbody class="divide-y divide-slate-800">
                     {% for account in accounts %}
                         <tr class="bg-slate-900/50 hover:bg-slate-800/60 transition">
-                            <td class="px-4 py-3 text-slate-300 max-w-48 truncate" title="{{ account.name }}">{{ account.name }}</td>
-                            <td class="px-4 py-3 text-slate-300 max-w-48 truncate" title="{{ account.bank_name }}">{{ account.bank_name|default:'—' }}</td>
+                            <td class="px-4 py-3 text-slate-300 max-w-40 truncate" title="{{ account.name }}">{{ account.name }}</td>
+                            <td class="px-4 py-3 text-slate-300 max-w-40 truncate" title="{{ account.bank_name }}">{{ account.bank_name|default:'—' }}</td>
                             <td class="px-4 py-3 text-slate-300 whitespace-nowrap">{{ account.get_account_type_display }}</td>
                             <td class="px-4 py-3 text-slate-300 whitespace-nowrap tabular-nums">{% include 'components/balance.html' with value=account.initial_balance %}</td>
                             <td class="px-4 py-3 text-slate-100 font-semibold whitespace-nowrap tabular-nums">{% include 'components/balance.html' with value=account.current_balance %}</td>
@@ -68,19 +68,19 @@
                     </div>
                     <dl class="mt-4 space-y-2 text-sm">
                         <div class="flex justify-between gap-4">
-                            <dt class="shrink-0 text-slate-500">Banco</dt>
+                            <dt class="shrink-0 text-slate-400">Banco</dt>
                             <dd class="min-w-0 truncate text-slate-300" title="{{ account.bank_name }}">{{ account.bank_name|default:'—' }}</dd>
                         </div>
                         <div class="flex justify-between gap-4">
-                            <dt class="shrink-0 text-slate-500">Tipo</dt>
+                            <dt class="shrink-0 text-slate-400">Tipo</dt>
                             <dd class="min-w-0 truncate text-slate-300">{{ account.get_account_type_display }}</dd>
                         </div>
                         <div class="flex justify-between gap-4">
-                            <dt class="shrink-0 text-slate-500">Saldo inicial</dt>
+                            <dt class="shrink-0 text-slate-400">Saldo inicial</dt>
                             <dd class="min-w-0 truncate text-slate-300 tabular-nums">{% include 'components/balance.html' with value=account.initial_balance %}</dd>
                         </div>
                         <div class="flex justify-between gap-4">
-                            <dt class="shrink-0 text-slate-500">Saldo atual</dt>
+                            <dt class="shrink-0 text-slate-400">Saldo atual</dt>
                             <dd class="min-w-0 truncate text-slate-100 font-semibold tabular-nums">{% include 'components/balance.html' with value=account.current_balance %}</dd>
                         </div>
                     </dl>

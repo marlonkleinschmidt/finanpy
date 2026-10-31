@@ -1,6 +1,6 @@
 {% extends 'base_auth.html' %}
 
-{% block title %}Categorias | Finanpy{% endblock %}
+{% block title %}{% if object %}Editar categoria{% else %}Nova categoria{% endif %} | Finanpy{% endblock %}
 
 {% block content %}
     {% if object %}
@@ -8,7 +8,7 @@
     {% else %}
         {% include 'components/page_header.html' with title='Nova categoria' %}
     {% endif %}
-    <form method="post" class="max-w-2xl bg-slate-900 border border-slate-700/50 rounded-2xl p-6 md:p-8 space-y-5 shadow-xl shadow-black/20">
+    <form method="post" class="max-w-2xl bg-slate-900 border border-slate-700/50 rounded-2xl p-6 md:p-8 space-y-5">
         {% csrf_token %}
         {% include 'components/form_errors.html' %}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">

@@ -17,7 +17,7 @@
                 {% include 'components/form_field.html' with field=filter_form.account %}
                 {% include 'components/form_field.html' with field=filter_form.category %}
             </div>
-            <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4">
                 <a href="{{ list_url }}" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-slate-800 text-slate-100 border border-slate-700 hover:bg-slate-700">Limpar</a>
                 <button type="submit" class="cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-violet-900/30 hover:opacity-90">Filtrar</button>
             </div>
@@ -48,14 +48,14 @@
                     {% for transaction in transactions %}
                         <tr class="bg-slate-900/50 hover:bg-slate-800/60 transition">
                             <td class="px-4 py-3 text-slate-300 whitespace-nowrap tabular-nums">{{ transaction.date|date:'d/m/Y' }}</td>
-                            <td class="px-4 py-3 text-slate-300 max-w-48 truncate" title="{{ transaction.description }}">{{ transaction.description }}</td>
-                            <td class="px-4 py-3 text-slate-300 max-w-32">
+                            <td class="px-4 py-3 text-slate-300 max-w-40 truncate" title="{{ transaction.description }}">{{ transaction.description }}</td>
+                            <td class="px-4 py-3 text-slate-300 max-w-28">
                                 <div class="flex min-w-0 items-center gap-2">
                                     <span class="size-3 shrink-0 rounded-full" style="background-color: {{ transaction.category.color }}" aria-hidden="true"></span>
                                     <span class="min-w-0 truncate" title="{{ transaction.category.name }}">{{ transaction.category.name }}</span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3 text-slate-300 max-w-32 truncate" title="{{ transaction.account.name }}">{{ transaction.account.name }}</td>
+                            <td class="px-4 py-3 text-slate-300 max-w-28 truncate" title="{{ transaction.account.name }}">{{ transaction.account.name }}</td>
                             <td class="px-4 py-3 text-slate-300 whitespace-nowrap">
                                 {% if transaction.transaction_type == 'income' %}
                                     <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/15 text-emerald-400">{{ transaction.get_transaction_type_display }}</span>
@@ -107,22 +107,22 @@
                     </div>
                     <dl class="mt-4 space-y-2 text-sm">
                         <div class="flex justify-between gap-4">
-                            <dt class="shrink-0 text-slate-500">Data</dt>
+                            <dt class="shrink-0 text-slate-400">Data</dt>
                             <dd class="min-w-0 truncate text-slate-300 tabular-nums">{{ transaction.date|date:'d/m/Y' }}</dd>
                         </div>
                         <div class="flex justify-between gap-4">
-                            <dt class="shrink-0 text-slate-500">Categoria</dt>
+                            <dt class="shrink-0 text-slate-400">Categoria</dt>
                             <dd class="flex min-w-0 items-center gap-2 text-slate-300">
                                 <span class="size-3 shrink-0 rounded-full" style="background-color: {{ transaction.category.color }}" aria-hidden="true"></span>
                                 <span class="min-w-0 truncate" title="{{ transaction.category.name }}">{{ transaction.category.name }}</span>
                             </dd>
                         </div>
                         <div class="flex justify-between gap-4">
-                            <dt class="shrink-0 text-slate-500">Conta</dt>
+                            <dt class="shrink-0 text-slate-400">Conta</dt>
                             <dd class="min-w-0 truncate text-slate-300" title="{{ transaction.account.name }}">{{ transaction.account.name }}</dd>
                         </div>
                         <div class="flex justify-between gap-4">
-                            <dt class="shrink-0 text-slate-500">Tipo</dt>
+                            <dt class="shrink-0 text-slate-400">Tipo</dt>
                             <dd class="min-w-0">
                                 {% if transaction.transaction_type == 'income' %}
                                     <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/15 text-emerald-400">{{ transaction.get_transaction_type_display }}</span>
@@ -132,7 +132,7 @@
                             </dd>
                         </div>
                         <div class="flex justify-between gap-4">
-                            <dt class="shrink-0 text-slate-500">Valor</dt>
+                            <dt class="shrink-0 text-slate-400">Valor</dt>
                             {% if transaction.transaction_type == 'income' %}
                                 <dd class="min-w-0 truncate text-emerald-400 font-semibold tabular-nums">+ R$ {{ transaction.amount|floatformat:'2g' }}</dd>
                             {% else %}

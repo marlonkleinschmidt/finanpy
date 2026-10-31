@@ -384,31 +384,31 @@
 
 ---
 
-### Sprint 8 — Revisão, padronização e refinamento
+### [x] Sprint 8 — Revisão, padronização e refinamento
 
-- [ ] **8.1 Revisão de segurança e isolamento**
-  - [ ] 8.1.1 Verificar que todas as views autenticadas usam `LoginRequiredMixin`.
-  - [ ] 8.1.2 Testar manualmente o acesso por URL a objetos de outro usuário (deve retornar 404) em contas, categorias e transações.
-  - [ ] 8.1.3 Verificar que o logout é feito via POST.
-  - [ ] 8.1.4 Verificar que `SECRET_KEY`, `DEBUG` e `ALLOWED_HOSTS` continuam vindo do `.env` (tarefa 0.4) e que nenhum segredo está versionado.
+- [x] **8.1 Revisão de segurança e isolamento**
+  - [x] 8.1.1 Verificar que todas as views autenticadas usam `LoginRequiredMixin`.
+  - [x] 8.1.2 Testar manualmente o acesso por URL a objetos de outro usuário (deve retornar 404) em contas, categorias e transações.
+  - [x] 8.1.3 Verificar que o logout é feito via POST.
+  - [x] 8.1.4 Verificar que `SECRET_KEY`, `DEBUG` e `ALLOWED_HOSTS` continuam vindo do `.env` (tarefa 0.4) e que nenhum segredo está versionado.
 
-- [ ] **8.2 Revisão de interface**
-  - [ ] 8.2.1 Revisar todos os textos da interface em português brasileiro.
-  - [ ] 8.2.2 Revisar consistência visual de todas as telas com o design system.
-  - [ ] 8.2.3 Revisar formatação de valores (R$) e datas (dd/mm/aaaa) em todas as telas.
-  - [ ] 8.2.4 Revisar todas as telas nos breakpoints 375px, 768px e 1280px.
-  - [ ] 8.2.5 Adicionar `{% block title %}` específico em cada página (ex.: "Contas | Finanpy").
+- [x] **8.2 Revisão de interface**
+  - [x] 8.2.1 Revisar todos os textos da interface em português brasileiro.
+  - [x] 8.2.2 Revisar consistência visual de todas as telas com o design system.
+  - [x] 8.2.3 Revisar formatação de valores (R$) e datas (dd/mm/aaaa) em todas as telas.
+  - [x] 8.2.4 Revisar todas as telas nos breakpoints 375px, 768px e 1280px.
+  - [x] 8.2.5 Adicionar `{% block title %}` específico em cada página (ex.: "Contas | Finanpy").
 
-- [ ] **8.3 Revisão de código**
-  - [ ] 8.3.1 Executar `ruff check .` e corrigir todos os apontamentos.
-  - [ ] 8.3.2 Verificar uso de aspas simples em todo o código Python.
-  - [ ] 8.3.3 Verificar que todo o código (nomes, URLs, models) está em inglês.
-  - [ ] 8.3.4 Verificar que todos os models possuem `created_at` e `updated_at`.
-  - [ ] 8.3.5 Remover código não utilizado e arquivos desnecessários.
+- [x] **8.3 Revisão de código**
+  - [x] 8.3.1 Executar `ruff check .` e corrigir todos os apontamentos.
+  - [x] 8.3.2 Verificar uso de aspas simples em todo o código Python.
+  - [x] 8.3.3 Verificar que todo o código (nomes, URLs, models) está em inglês.
+  - [x] 8.3.4 Verificar que todos os models possuem `created_at` e `updated_at`.
+  - [x] 8.3.5 Remover código não utilizado e arquivos desnecessários.
 
-- [ ] **8.4 Documentação**
-  - [ ] 8.4.1 Criar `README.md` com descrição, requisitos, instalação, comandos de build do Tailwind e como rodar o projeto.
-  - [ ] 8.4.2 Atualizar `requirements.txt`.
+- [x] **8.4 Documentação**
+  - [x] 8.4.1 Criar `README.md` com descrição, requisitos, instalação, comandos de build do Tailwind e como rodar o projeto.
+  - [x] 8.4.2 Atualizar `requirements.txt`.
 
 ---
 

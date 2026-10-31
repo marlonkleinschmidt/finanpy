@@ -20,6 +20,7 @@ class SignUpForm(StyledFormMixin, UserCreationForm):
         }
         error_messages = {
             'email': {
+                'invalid': 'Informe um e-mail válido.',
                 'unique': 'Já existe um usuário com este e-mail.',
             },
         }

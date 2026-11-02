@@ -37,6 +37,16 @@ python manage.py runserver
 
 O servidor sobe em `http://127.0.0.1:8000/`. O admin do Django fica em `/admin/`.
 
+## Rodando com Docker
+
+Com o `.env` criado a partir do `.env.example`:
+
+```bash
+docker compose up --build
+```
+
+A aplicação sobe em `http://localhost:8000/`, com o banco em um volume próprio. Essa configuração não é para produção. Os detalhes estão na seção Docker do `README.md`.
+
 ## Dependências
 
 Ao instalar um novo pacote, atualize o arquivo de dependências:
@@ -47,4 +57,4 @@ pip freeze > requirements.txt
 
 ## Arquivos ignorados
 
-O `.gitignore` já ignora, entre outros: `venv/`, `__pycache__/`, `*.pyc`, `db.sqlite3`, `.env` e `static/css/output.css`.
+O `.gitignore` já ignora, entre outros: `venv/`, `__pycache__/`, `*.pyc`, `db.sqlite3`, `.env`, `static/css/output.css` e `staticfiles/`.

@@ -1,0 +1,18 @@
+services:
+  web:
+    build: .
+    init: true
+    ports:
+      - '8000:8000'
+    env_file:
+      # raw: a SECRET_KEY gerada pelo Django pode conter $, que não deve ser
+      # interpretado pelo Compose.
+      - path: .env
+        format: raw
+    environment:
+      DATABASE_PATH: /data/db.sqlite3
+    volumes:
+      - db_data:/data
+
+volumes:
+  db_data:

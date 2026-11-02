@@ -17,7 +17,7 @@ Cada usuário acessa apenas os próprios dados.
 - Python 3.12 ou superior.
 - Tailwind CLI standalone, sem Node.js (veja [TailwindCSS](#tailwindcss)).
 
-O banco de dados é SQLite, que dispensa instalação.
+O banco de dados é SQLite, que dispensa instalação. Com o Docker, nada disso é necessário (veja [Docker](#docker)).
 
 ## Instalação
 
@@ -52,6 +52,7 @@ Cole a chave gerada em `SECRET_KEY` no arquivo `.env`, sem aspas. O projeto não
 | `SECRET_KEY`    | Chave secreta do Django. Obrigatória.                                           |
 | `DEBUG`         | `True` no desenvolvimento. Qualquer outro valor, ou a ausência dela, é `False`. |
 | `ALLOWED_HOSTS` | Hosts aceitos, separados por vírgula.                                           |
+| `DATABASE_PATH` | Caminho do SQLite. Opcional: o padrão é `db.sqlite3`, na raiz do projeto.       |
 
 Crie o banco de dados:
 
@@ -100,6 +101,43 @@ O admin do Django fica em `/admin/`. Para acessá-lo, crie um superusuário. O c
 ```powershell
 python manage.py createsuperuser
 ```
+
+## Docker
+
+Esta é a forma de rodar sem instalar Python nem o Tailwind CLI. Só é preciso ter o Docker com o Compose 2.30 ou superior.
+
+**Esta configuração não é para produção.** A imagem usa o `runserver` do Django com a opção `--insecure`, que serve os arquivos estáticos também com `DEBUG=False`. A própria documentação do Django desaconselha esse uso em produção, por ser ineficiente e provavelmente inseguro. Use-a apenas para rodar a aplicação localmente.
+
+Copie o arquivo de variáveis de ambiente e gere uma `SECRET_KEY`. O comando abaixo não exige Python na máquina:
+
+```powershell
+copy .env.example .env
+docker run --rm python:3.12-slim python -c "import secrets; print(secrets.token_urlsafe(50))"
+```
+
+Cole a chave gerada em `SECRET_KEY` no arquivo `.env`, sem aspas. O Compose não inicia sem esse arquivo, e ele não entra na imagem: os valores chegam ao container apenas na execução. Uma chave com `$` funciona, mas o Compose mostra avisos de `variable is not set`.
+
+Construa a imagem e inicie a aplicação:
+
+```powershell
+docker compose up --build
+```
+
+A aplicação fica em `http://localhost:8000/`. As migrations são aplicadas a cada inicialização, e o `output.css` é gerado durante o build, com o Tailwind CLI 4.3.3 para Linux, que o próprio build baixa.
+
+Se a porta 8000 já estiver em uso, o Compose falha com `port is already allocated`. Libere a porta ou troque o primeiro número em `ports` no `docker-compose.yml`, por exemplo `'8001:8000'`.
+
+O banco SQLite fica no volume `db_data`, separado do `db.sqlite3` usado fora do Docker. Os dois não compartilham dados.
+
+| Comando                                                    | Uso                                              |
+| ---------------------------------------------------------- | ------------------------------------------------ |
+| `docker compose up -d`                                     | Inicia em segundo plano.                         |
+| `docker compose logs -f web`                               | Acompanha os logs.                               |
+| `docker compose exec web python manage.py createsuperuser` | Cria um superusuário para o `/admin/`.           |
+| `docker compose down`                                      | Remove o container e **mantém** os dados.        |
+| `docker compose down -v`                                   | Remove o container e **apaga** o banco de dados. |
+
+O código é copiado para a imagem no build. Depois de alterar código ou templates, rode novamente `docker compose up --build`.
 
 ## Testes e lint
 

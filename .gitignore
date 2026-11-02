@@ -268,5 +268,8 @@ pyrightconfig.json
 static/css/output.css
 tailwindcss.exe
 
+# Saída do collectstatic
+staticfiles/
+
 # Playwright MCP
 .playwright-mcp/

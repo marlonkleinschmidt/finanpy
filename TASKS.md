@@ -100,7 +100,7 @@
   - [x] 1.7.2 Incluir `users.urls` em `core/urls.py`.
   - [x] 1.7.3 Definir `LOGIN_URL = 'login'`, `LOGIN_REDIRECT_URL = 'dashboard'` e `LOGOUT_REDIRECT_URL = 'home'`.
 
-- [ ] **1.8 Templates provisórios de autenticação**
+- [x] **1.8 Templates provisórios de autenticação**
   - [x] 1.8.1 Criar `users/templates/users/signup.html` com formulário simples (será estilizado na Sprint 2).
   - [x] 1.8.2 Criar `users/templates/users/login.html` com formulário simples.
   - [x] 1.8.3 Testar manualmente cadastro, login com e-mail e logout.
@@ -458,22 +458,223 @@
 
 ---
 
-### Sprint 10 — Docker
+### Sprint 10 — Assistente Financeiro com IA
 
-- [ ] **10.1 Dockerfile**
-  - [ ] 10.1.1 Criar `Dockerfile` baseado em `python:3.12-slim`.
-  - [ ] 10.1.2 Instalar dependências do `requirements.txt`.
-  - [ ] 10.1.3 Baixar o Tailwind CLI standalone e gerar `output.css` com `--minify` durante o build.
-  - [ ] 10.1.4 Executar `collectstatic` durante o build.
-  - [ ] 10.1.5 Definir comando de inicialização (`migrate` + servidor).
+> **Especificação:** `PRD.md`, seção 14. Em caso de dúvida, vale o PRD. **Responsáveis:** `agents/README.md`.
+>
+> **Pré-requisito:** decidir o item I-01 do PRD (`gpt-5-mini` será desligado em 11/12/2026) antes de concluir a tarefa 10.3.
 
-- [ ] **10.2 docker-compose**
-  - [ ] 10.2.1 Criar `docker-compose.yml` com o serviço `web`.
-  - [ ] 10.2.2 Mapear a porta 8000.
-  - [ ] 10.2.3 Criar volume para persistir o arquivo SQLite.
-  - [ ] 10.2.4 Configurar variáveis de ambiente (`SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`) via `.env`.
+- [ ] **10.1 Preparar a arquitetura e as dependências**
+  - **Objetivo:** instalar as bibliotecas e confirmar, antes de escrever a funcionalidade, os comportamentos que a documentação não deixa claros.
+  - **Arquivos:** `requirements.txt`; rascunhos fora do repositório.
+  - **Dependências:** nenhuma.
+  - **Resultado esperado:** dependências fixadas e dúvidas técnicas respondidas.
+  - **Critérios de conclusão:** `manage.py check` e os testes atuais passam com as novas dependências, e as respostas de 10.1.5 estão registradas na documentação técnica ou no relato da tarefa.
+  - [ ] 10.1.1 Consultar no Context7 a documentação de `create_agent`, `ToolRuntime`, `ToolStrategy` e dos middlewares usados (`/websites/langchain_oss_python_langchain`).
+  - [ ] 10.1.2 Instalar `langchain` e `langchain-openai` na linha 1.x, com `langchain-openai>=1.4.1`.
+  - [ ] 10.1.3 Regenerar o `requirements.txt` em UTF-8 (`pip freeze | Out-File -Encoding utf8 requirements.txt`), sem incluir as ferramentas de `requirements-dev.txt`.
+  - [ ] 10.1.4 Executar `manage.py check` e `manage.py test` e comparar o resultado com o estado anterior.
+  - [ ] 10.1.5 Confirmar com modelo falso: se a tool do `ToolStrategy` conta no `ToolCallLimitMiddleware`; como o `PIIMiddleware` trata resultados em JSON; se as tools rodam em thread separada; e como o middleware lê `runtime.context`.
+  - [ ] 10.1.6 Confirmar que `create_react_agent`, `AgentExecutor`, `initialize_agent` e `langchain_classic` não são necessários nem usados.
 
-- [ ] **10.3 Finalização**
-  - [ ] 10.3.1 Criar `.dockerignore` (venv, `__pycache__`, `.git`, `db.sqlite3`).
-  - [ ] 10.3.2 Testar `docker compose up --build` do zero.
-  - [ ] 10.3.3 Atualizar o `README.md` com instruções de uso do Docker.
+- [ ] **10.2 Configurar a app `ai`**
+  - **Objetivo:** deixar a app pronta para receber os módulos, sem efeito nas demais.
+  - **Arquivos:** `ai/apps.py`, `ai/urls.py`, `core/urls.py`, `core/settings.py`.
+  - **Dependências:** 10.1.
+  - **Resultado esperado:** app registrada, com rotas vazias e settings carregados do ambiente.
+  - **Critérios de conclusão:** `manage.py check` passa sem `OPENAI_API_KEY`, e as rotas existentes não mudam.
+  - [ ] 10.2.1 Confirmar `ai` em `INSTALLED_APPS` e definir `verbose_name = 'Assistente IA'` em `AiConfig`.
+  - [ ] 10.2.2 Criar `ai/urls.py` com `app_name = 'ai'` e incluir em `core/urls.py` com o prefixo `ai/`.
+  - [ ] 10.2.3 Adicionar a `core/settings.py` os settings do Assistente (PRD 14.8 e 14.18), lendo do ambiente, com os padrões do PRD e conversão de tipos.
+  - [ ] 10.2.4 Criar a estrutura vazia de `ai/context.py`, `schemas.py`, `queries.py`, `tools.py`, `prompts.py`, `agent.py`, `validators.py` e `services.py`.
+
+- [ ] **10.3 Configurar a integração com a OpenAI**
+  - **Objetivo:** criar o cliente do modelo em um único ponto, com chave segura e parâmetros configuráveis.
+  - **Arquivos:** `ai/agent.py`, `.env.example`, `.env` local.
+  - **Dependências:** 10.2 e a decisão do item I-01.
+  - **Resultado esperado:** `build_chat_model()` funcionando, com o modelo definido por variável de ambiente.
+  - **Critérios de conclusão:** a chave não aparece em código, logs ou Git; importar `ai.services` não carrega o LangChain; o sistema inicia sem a chave.
+  - [ ] 10.3.1 Implementar `build_chat_model()` conforme PRD 14.8, sem enviar `temperature`.
+  - [ ] 10.3.2 Adicionar `OPENAI_API_KEY` vazia e `AI_MODEL_NAME` ao `.env.example`, com comentário sobre o desligamento do `gpt-5-mini`.
+  - [ ] 10.3.3 Confirmar que `.env` continua no `.gitignore` e no `.dockerignore`.
+  - [ ] 10.3.4 Garantir o carregamento tardio do LangChain (RNF23).
+  - [ ] 10.3.5 Confirmar que o rastreamento do LangSmith permanece desativado (RNF26).
+  - [ ] 10.3.6 Com autorização do responsável, pois há custo, testar uma chamada real com `gpt-5-mini` e com o modelo substituto, se a decisão I-01 o incluir, confirmando os parâmetros aceitos.
+
+- [ ] **10.4 Implementar o contrato de isolamento e as consultas**
+  - **Objetivo:** criar a camada de leitura que torna impossível consultar dados sem indicar o dono.
+  - **Arquivos:** `ai/context.py`, `ai/queries.py`.
+  - **Dependências:** 10.2.
+  - **Resultado esperado:** `AnalysisContext` imutável e funções puras de consulta, filtradas por usuário, com custo limitado.
+  - **Critérios de conclusão:** toda função recebe `user_id` como primeiro parâmetro obrigatório, não grava nada, usa número fixo de consultas e não carrega transações sem limite.
+  - [ ] 10.4.1 Criar `AnalysisContext` (`dataclass(frozen=True)`), conforme PRD 14.12.
+  - [ ] 10.4.2 Implementar a função que calcula o período (RN02) a partir de `timezone.localdate()`.
+  - [ ] 10.4.3 Implementar `get_financial_summary` e o cálculo de `metrics_snapshot`, excluindo datas futuras (RN03).
+  - [ ] 10.4.4 Implementar `get_monthly_evolution` com `TruncMonth`, preenchendo meses sem movimento e marcando `is_partial_month` (RN04).
+  - [ ] 10.4.5 Implementar `get_category_breakdown` com `others_total`.
+  - [ ] 10.4.6 Implementar `get_category_changes` somente para meses fechados, com `is_significant` conforme RN10.
+  - [ ] 10.4.7 Implementar `get_recurring_expenses` conforme RN09.
+  - [ ] 10.4.8 Implementar `get_largest_transactions` com `select_related` e `limit`.
+  - [ ] 10.4.9 Implementar `get_accounts_overview` em uma só consulta, sem expor `bank_name`.
+  - [ ] 10.4.10 Serializar valores como texto com `quantize(Decimal('0.01'))`, nunca como `float`.
+
+- [ ] **10.5 Desenvolver as tools de acesso aos dados financeiros**
+  - **Objetivo:** expor as consultas ao agente sem dar a ele controle sobre o usuário.
+  - **Arquivos:** `ai/tools.py`.
+  - **Dependências:** 10.4.
+  - **Resultado esperado:** as 7 tools da seção 14.9 do PRD, reunidas em `FINANCIAL_TOOLS`.
+  - **Critérios de conclusão:** nenhum schema de tool tem campo de usuário; parâmetros inválidos retornam erro ao modelo sem encerrar a execução; nenhuma conexão de banco fica aberta nas threads do pool.
+  - [ ] 10.5.1 Criar as tools com `@tool`, docstring em inglês para o modelo e `runtime: ToolRuntime[AnalysisContext]`.
+  - [ ] 10.5.2 Declarar tipos e limites com `Annotated`, `Literal` e `Field`.
+  - [ ] 10.5.3 Implementar `ToolArgumentError` e a validação de contexto, com retorno `{'error', 'detail'}`.
+  - [ ] 10.5.4 Implementar o decorator que fecha a conexão ao rodar em thread diferente de `owner_thread_id`.
+  - [ ] 10.5.5 Verificar o schema gerado de cada tool (`tool.args`), confirmando que `runtime` não aparece.
+
+- [ ] **10.6 Implementar o agente com LangChain 1.0**
+  - **Objetivo:** montar o agente com saída estruturada, limites e sem memória entre execuções.
+  - **Arquivos:** `ai/schemas.py`, `ai/prompts.py`, `ai/agent.py`.
+  - **Dependências:** 10.3 e 10.5.
+  - **Resultado esperado:** `run_agent(context)` retornando saída estruturada, mensagens e uso de tokens.
+  - **Critérios de conclusão:** o agente executa de ponta a ponta com modelo falso; não há `checkpointer`, `store` nem API obsoleta; todos os limites foram verificados por teste.
+  - [ ] 10.6.1 Criar `EvidenceItem`, `Insight`, `Recommendation`, `Alert` e `AnalysisOutput` (PRD 14.11).
+  - [ ] 10.6.2 Escrever `SYSTEM_PROMPT` (PRD 14.7) e `PROMPT_VERSION`.
+  - [ ] 10.6.3 Montar `create_agent` com `context_schema` e `response_format=ToolStrategy(AnalysisOutput)`.
+  - [ ] 10.6.4 Configurar `ModelCallLimitMiddleware`, `ToolCallLimitMiddleware` e `PIIMiddleware`.
+  - [ ] 10.6.5 Implementar `enforce_run_deadline` com `before_model(can_jump_to=['end'])`.
+  - [ ] 10.6.6 Executar com `recursion_limit` explícito e uma instância de `UsageMetadataCallbackHandler` por execução.
+
+- [ ] **10.7 Criar a estrutura de persistência das análises**
+  - **Objetivo:** guardar cada execução com histórico, auditoria e proteção contra duplicidade.
+  - **Arquivos:** `ai/models.py`, `ai/migrations/`, `ai/admin.py`.
+  - **Dependências:** 10.2.
+  - **Resultado esperado:** model `FinancialAnalysis` e migration, sem alterar nenhuma outra app.
+  - **Critérios de conclusão:** `makemigrations --check` limpo; a migration cria somente a tabela da app `ai`; a restrição impede dois `pending` para o mesmo usuário; excluir usuário pelo admin continua funcionando.
+  - [ ] 10.7.1 Criar `FinancialAnalysis` com os campos da seção 14.11 do PRD, herdando de `TimeStampedModel`.
+  - [ ] 10.7.2 Criar as opções de status e `error_code`, com rótulos em português.
+  - [ ] 10.7.3 Adicionar o índice e a `UniqueConstraint` condicional.
+  - [ ] 10.7.4 Gerar e aplicar a migration, conferindo o SQL com `sqlmigrate`.
+  - [ ] 10.7.5 Registrar o model no admin como somente leitura, mantendo a permissão de exclusão (PRD 14.12).
+
+- [ ] **10.8 Implementar a validação dos resultados e o tratamento de erros**
+  - **Objetivo:** impedir que conclusões sem evidência sejam gravadas e transformar qualquer falha em um estado conhecido.
+  - **Arquivos:** `ai/validators.py`, `ai/services.py`.
+  - **Dependências:** 10.6 e 10.7.
+  - **Resultado esperado:** validação de evidências e mapeamento de todas as exceções para `error_code`.
+  - **Critérios de conclusão:** cada código da seção 14.16 do PRD é alcançado em teste; nenhuma exceção do agente chega à view; `error_detail` guarda só a classe da exceção.
+  - [ ] 10.8.1 Extrair os valores retornados pelas tools a partir das `ToolMessage` de `result['messages']`.
+  - [ ] 10.8.2 Comparar cada evidência com os valores da tool indicada em `source_tool`, com normalização numérica.
+  - [ ] 10.8.3 Implementar as regras de descarte e de falha `unverified_output` (PRD 14.13).
+  - [ ] 10.8.4 Mapear as exceções de OpenAI, LangChain e LangGraph para `error_code` (PRD 14.16).
+  - [ ] 10.8.5 Tratar a ausência de `structured_response`, separando `timeout` de `limit_exceeded`.
+  - [ ] 10.8.6 Confirmar com `logger.exception` que os logs não contêm prompt, descrições nem a chave.
+
+- [ ] **10.9 Implementar o serviço de geração das análises**
+  - **Objetivo:** concentrar o fluxo completo em um único ponto de entrada.
+  - **Arquivos:** `ai/services.py`.
+  - **Dependências:** 10.8.
+  - **Resultado esperado:** `generate_analysis(user)`, `get_latest_valid_analysis(user)` e `get_dashboard_analysis_state(user)`.
+  - **Critérios de conclusão:** os 9 passos da seção 14.13 do PRD estão cobertos; nenhuma transação de banco fica aberta durante o agente; a função não depende de `request`.
+  - [ ] 10.9.1 Criar o enum `GenerationOutcome` (`success`, `failed`, `already_running`, `limit_reached`, `insufficient_data`, `disabled`).
+  - [ ] 10.9.2 Implementar o encerramento de `pending` antigos como `abandoned`.
+  - [ ] 10.9.3 Implementar as verificações de chave, mínimo de transações e limite diário, nessa ordem, sem chamar o modelo.
+  - [ ] 10.9.4 Criar o registro `pending`, tratando `IntegrityError` como `already_running`.
+  - [ ] 10.9.5 Executar o agente e gravar resultado, tokens, tools chamadas e duração.
+  - [ ] 10.9.6 Implementar as leituras do dashboard em no máximo 3 consultas, sem gravar e sem importar o LangChain.
+
+- [ ] **10.10 Integrar com o backend existente**
+  - **Objetivo:** ligar o serviço às rotas e ao dashboard, usando CBVs, pois o projeto não possui API REST.
+  - **Arquivos:** `ai/views.py`, `ai/urls.py`, `core/views.py`.
+  - **Dependências:** 10.9.
+  - **Resultado esperado:** rotas `ai:list`, `ai:create` e `ai:detail`, e `analysis_state` no contexto do dashboard.
+  - **Critérios de conclusão:** as rotas exigem login; GET em `ai:create` retorna 405; análise de outro usuário retorna 404; os KPIs atuais do dashboard não mudam.
+  - [ ] 10.10.1 Implementar `AnalysisListView` e `AnalysisDetailView` com `LoginRequiredMixin` e `UserQuerySetMixin`.
+  - [ ] 10.10.2 Implementar `AnalysisCreateView`, somente POST, usando somente `request.user`.
+  - [ ] 10.10.3 Converter cada `GenerationOutcome` na mensagem da seção 14.15 do PRD.
+  - [ ] 10.10.4 Adicionar `analysis_state` a `DashboardView`, sem alterar os cálculos existentes.
+  - [ ] 10.10.5 Informar ao frontend as rotas, as variáveis de contexto e os estados.
+
+- [ ] **10.11 Integrar com o dashboard no frontend**
+  - **Objetivo:** apresentar as análises e todos os estados com clareza, seguindo o design system.
+  - **Arquivos:** `templates/components/analysis_card.html`, `templates/dashboard.html`, `templates/components/sidebar.html`, `ai/templates/ai/analysis_list.html`, `ai/templates/ai/analysis_detail.html`, `static/js/analysis_form.js`.
+  - **Dependências:** 10.10.
+  - **Resultado esperado:** card no dashboard, histórico, detalhe e item na sidebar.
+  - **Critérios de conclusão:** os 9 estados são exibidos sem erro nos três breakpoints; sem rolagem horizontal; conteúdo gerado sempre escapado, sem `|safe`; `output.css` regenerado.
+  - [ ] 10.11.1 Criar `analysis_card.html` com o conteúdo da seção 14.15 do PRD.
+  - [ ] 10.11.2 Implementar os 9 estados, com textos em português e números vindos dos settings.
+  - [ ] 10.11.3 Incluir o card entre os KPIs e as últimas transações em `dashboard.html`.
+  - [ ] 10.11.4 Criar `analysis_form.js`, com o formulário funcionando também sem JavaScript.
+  - [ ] 10.11.5 Criar `analysis_list.html`, com paginação e estado vazio.
+  - [ ] 10.11.6 Criar `analysis_detail.html`, com insights, recomendações, alertas, evidências, limitações e o aviso educativo.
+  - [ ] 10.11.7 Adicionar **Assistente IA** à sidebar, com `app_name='ai'`.
+  - [ ] 10.11.8 Definir `{% block title %}` em cada nova página.
+  - [ ] 10.11.9 Validar no navegador nos três breakpoints e todos os estados, com o `qa-tester`.
+
+- [ ] **10.12 Implementar testes unitários e de integração**
+  - **Objetivo:** verificar a funcionalidade sem custo, sem rede e sem depender de respostas variáveis do modelo.
+  - **Arquivos:** `ai/tests.py` e `core/tests.py`.
+  - **Dependências:** 10.11.
+  - **Resultado esperado:** suíte da app `ai` com modelo falso, mais um teste real opcional.
+  - **Critérios de conclusão:** `manage.py test` passa sem chave e sem internet; cobertura da app `ai` de pelo menos 80%; `ruff check .` sem apontamentos.
+  - [ ] 10.12.1 Criar a subclasse de `GenericFakeChatModel` com `bind_tools`, instanciando o iterador em cada teste.
+  - [ ] 10.12.2 Testar cada função de `queries.py` com valores calculados à mão, incluindo datas futuras, mês parcial e meses sem movimento.
+  - [ ] 10.12.3 Testar que `get_accounts_overview` confere com `Account.current_balance`.
+  - [ ] 10.12.4 Testar com `assertNumQueries` que o custo das consultas não cresce com o volume de dados.
+  - [ ] 10.12.5 Testar as tools: parâmetros válidos, fora do período e acima dos limites.
+  - [ ] 10.12.6 Testar o agente com `TransactionTestCase`: chamada de tool, saída estruturada e nova tentativa após saída inválida.
+  - [ ] 10.12.7 Testar os limites de chamadas e o prazo total.
+  - [ ] 10.12.8 Testar a validação de evidências: válida, inventada, descarte e `main_insight` rejeitado.
+  - [ ] 10.12.9 Testar `generate_analysis` em cada resultado, e cada `error_code` com exceções simuladas.
+  - [ ] 10.12.10 Testar as views e o dashboard: login, POST, 405, mensagens, estados e ausência de chamada ao modelo.
+  - [ ] 10.12.11 Criar o teste real ativado só por `RUN_LIVE_AI_TESTS=True` e, com autorização do responsável, executá-lo para medir tempo, tokens e custo.
+
+- [ ] **10.13 Testar a segurança e o isolamento entre usuários**
+  - **Objetivo:** demonstrar por testes que o agente não acessa dados de outro usuário, mesmo se o modelo tentar.
+  - **Arquivos:** `ai/tests.py`.
+  - **Dependências:** 10.12.
+  - **Resultado esperado:** testes adversariais, com os usuários A e B e dados diferentes.
+  - **Critérios de conclusão:** todos os cenários passam; qualquer vazamento é defeito **Crítico** e bloqueia o encerramento da sprint.
+  - [ ] 10.13.1 Simular tool calls com `user_id` forjado para B em execução de A e confirmar que só retornam dados de A.
+  - [ ] 10.13.2 Verificar que todas as funções de `queries.py` e todas as tools ignoram dados de B.
+  - [ ] 10.13.3 Executar análises de A e B em threads simultâneas e confirmar que cada registro contém só dados do próprio dono.
+  - [ ] 10.13.4 Testar, com B autenticado, 404 no detalhe de A e ausência de análises de A na lista e no dashboard.
+  - [ ] 10.13.5 Testar que `user_id` enviado no POST é ignorado.
+  - [ ] 10.13.6 Inserir instruções maliciosas e código HTML em descrições e confirmar que o conteúdo é escapado e que continuam disponíveis só as tools de leitura.
+  - [ ] 10.13.7 Testar que as tools não alteram nenhum registro (contagem e conteúdo iguais antes e depois).
+  - [ ] 10.13.8 Testar que o conteúdo enviado ao modelo não contém nome, e-mail, telefone, `bank_name` nem identificadores internos, e que e-mails e cartões em descrições são removidos.
+  - [ ] 10.13.9 Testar a restrição de análise em andamento e o limite diário por usuário, sem afetar outro usuário.
+  - [ ] 10.13.10 Validar o isolamento no navegador, com o `qa-tester`.
+
+- [ ] **10.14 Documentar a implementação**
+  - **Objetivo:** deixar a funcionalidade operável por quem não participou da implementação.
+  - **Arquivos:** `docs/ia.md`, `docs/README.md`, `docs/setup.md`, `docs/estrutura.md`, `README.md`, `CLAUDE.md`, `.env.example`.
+  - **Dependências:** 10.13.
+  - **Resultado esperado:** documentação técnica e de configuração atualizada, com a imagem Docker validada.
+  - **Critérios de conclusão:** um novo desenvolvedor configura o Assistente seguindo só os documentos; a imagem sobe com e sem a chave; todas as tarefas desta sprint estão marcadas.
+  - [ ] 10.14.1 Criar `docs/ia.md` com arquitetura, tools, fluxo, códigos de erro, limites e como trocar o modelo.
+  - [ ] 10.14.2 Registrar em `docs/ia.md` as respostas da tarefa 10.1.5 e o custo e o tempo medidos em 10.12.11.
+  - [ ] 10.14.3 Atualizar `docs/setup.md`, `docs/estrutura.md`, `docs/README.md` e o `README.md`.
+  - [ ] 10.14.4 Reconstruir a imagem Docker com as novas dependências e validar o sistema com e sem `OPENAI_API_KEY`.
+  - [ ] 10.14.5 Atualizar o `CLAUDE.md` com a app `ai`, a exceção de dependências e o local real das tarefas (itens I-03 e I-09 do PRD).
+  - [ ] 10.14.6 Corrigir as referências antigas a "Sprint 10" (Docker) em `agents/devops-docker.md` e a "PRD, seção 13" em `agents/` e `docs/`.
+
+---
+
+### [x] Sprint 11 — Docker
+
+- [x] **11.1 Dockerfile**
+  - [x] 11.1.1 Criar `Dockerfile` baseado em `python:3.12-slim`.
+  - [x] 11.1.2 Instalar dependências do `requirements.txt`.
+  - [x] 11.1.3 Baixar o Tailwind CLI standalone e gerar `output.css` com `--minify` durante o build.
+  - [x] 11.1.4 Executar `collectstatic` durante o build.
+  - [x] 11.1.5 Definir comando de inicialização (`migrate` + servidor).
+
+- [x] **11.2 docker-compose**
+  - [x] 11.2.1 Criar `docker-compose.yml` com o serviço `web`.
+  - [x] 11.2.2 Mapear a porta 8000.
+  - [x] 11.2.3 Criar volume para persistir o arquivo SQLite.
+  - [x] 11.2.4 Configurar variáveis de ambiente (`SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`) via `.env`.
+
+- [x] **11.3 Finalização**
+  - [x] 11.3.1 Criar `.dockerignore` (venv, `__pycache__`, `.git`, `db.sqlite3`).
+  - [x] 11.3.2 Testar `docker compose up --build` do zero.
+  - [x] 11.3.3 Atualizar o `README.md` com instruções de uso do Docker.

@@ -1,0 +1,29 @@
+# Ambiente e segredos
+venv
+.env
+.env.example
+db.sqlite3
+db.sqlite3-journal
+
+# Gerados: o build produz os próprios
+**/__pycache__
+**/*.pyc
+static/css/output.css
+staticfiles
+tailwindcss.exe
+.coverage
+.ruff_cache
+
+# Fora da aplicação
+.git
+.gitignore
+.claude
+.playwright-mcp
+agents
+docs
+*.md
+requirements-dev.txt
+pyproject.toml
+Dockerfile
+docker-compose.yml
+.dockerignore

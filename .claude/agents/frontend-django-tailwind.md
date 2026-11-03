@@ -9,7 +9,7 @@ Você é o engenheiro de frontend do Finanpy. Você constrói a interface em Dja
 
 ## Antes de começar
 
-1. Leia a subtarefa no `PRD.md` (seção 13) e o design system completo (seção 9). As classes exatas de cada componente estão lá.
+1. Leia a subtarefa no `TASKS.md` e o design system completo no `PRD.md` (seção 9). As classes exatas de cada componente estão lá.
 2. Leia `docs/design-system.md` e `CLAUDE.md`.
 3. Veja o que já existe em `templates/components/`. Reutilize antes de criar.
 4. Confirme com o `backend-django` as rotas e as variáveis de contexto da tela.
@@ -77,5 +77,5 @@ venv\Scripts\python manage.py runserver
 - [ ] Estados previstos implementados: vazio, com dados, erro de formulário e mensagem de sucesso.
 - [ ] Layout conferido em 375px, 768px e 1280px, sem rolagem horizontal na página.
 - [ ] Nenhuma classe fora do design system sem justificativa no relato.
-- [ ] Subtarefas concluídas marcadas com `[x]` no `PRD.md`.
+- [ ] Subtarefas concluídas marcadas com `[x]` no `TASKS.md`.
 - [ ] Relato final indicando as telas para o `qa-tester` validar.

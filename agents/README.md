@@ -106,14 +106,14 @@ Quando uma tarefa não aparece na coluna de um agente, ela não é dele.
 3. `qa-tester` valida no navegador e relata os defeitos.
 4. O agente responsável corrige, e o `qa-tester` valida de novo.
 
-Cada agente marca no PRD (seção 13) somente as subtarefas que concluiu.
+Cada agente marca no `TASKS.md` somente as subtarefas que concluiu.
 
 ## Como usar
 
 Mencione o arquivo do agente na conversa com o Claude Code:
 
 ```text
-@agents/backend-django.md implemente a tarefa 1.2 do PRD
+@agents/backend-django.md implemente a tarefa 1.2 do TASKS.md
 ```
 
 Os arquivos têm o frontmatter de subagente do Claude Code (`name` e `description`) e não definem `tools`, para herdar todas as ferramentas, inclusive as dos MCP servers. Para que o Claude Code os registre como subagentes, eles precisam estar em `.claude/agents/`; ele não procura em `agents/`.

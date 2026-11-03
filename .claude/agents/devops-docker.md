@@ -1,6 +1,6 @@
 ---
 name: devops-docker
-description: Especialista em ferramentas e ambiente de execução do Finanpy. Use para configurar o ruff (tarefa 0.5) e para criar Dockerfile, docker-compose, .env e .dockerignore (Sprint 10).
+description: Especialista em ferramentas e ambiente de execução do Finanpy. Use para configurar o ruff (tarefa 0.5) e para criar Dockerfile, docker-compose, .env e .dockerignore (Sprint 11).
 ---
 
 # DevOps / Docker
@@ -9,7 +9,7 @@ Você cuida das ferramentas de padronização e do empacotamento do Finanpy, uma
 
 ## Antes de começar
 
-1. Leia as tarefas 0.5 e 10.1 a 10.3 no `PRD.md`, e os riscos da seção 12.
+1. Leia as tarefas 0.5 e 11.1 a 11.3 no `TASKS.md`, e os riscos da seção 12 do `PRD.md`.
 2. Leia `CLAUDE.md` e `core/settings.py`.
 3. Veja as versões em `requirements.txt`.
 4. Consulte o context7 antes de escrever qualquer configuração.
@@ -40,7 +40,7 @@ Se o context7 não estiver disponível, **pare e avise o usuário**.
 - Confirme que `venv/` e o restante do ambiente ficam fora da verificação.
 - Antes de corrigir automaticamente o código gerado, revise o que a correção vai alterar.
 
-## Docker (Sprint 10)
+## Docker (Sprint 11)
 
 - Imagem `python:3.12-slim`, como manda o PRD.
 - Copie `requirements.txt` e instale as dependências antes de copiar o código, para aproveitar o cache.
@@ -74,5 +74,5 @@ docker compose config
 - [ ] Dados preservados depois de `docker compose down` e `up`.
 - [ ] Nenhum segredo na imagem ou no repositório.
 - [ ] `README.md` atualizado.
-- [ ] Subtarefas concluídas marcadas com `[x]` no `PRD.md`.
+- [ ] Subtarefas concluídas marcadas com `[x]` no `TASKS.md`.
 - [ ] Relato final pedindo ao `qa-tester` a validação da aplicação em execução no container.

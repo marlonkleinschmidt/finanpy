@@ -52,7 +52,7 @@
 
 ---
 
-### Sprint 1 — Usuário customizado e autenticação
+### [x] Sprint 1 — Usuário customizado e autenticação
 
 - [x] **1.1 Criar model base com timestamps**
   - [x] 1.1.1 Decidir local do model abstrato `TimeStampedModel` (`core/models.py`).
@@ -458,7 +458,7 @@
 
 ---
 
-### Sprint 10 — Assistente Financeiro com IA
+### [x] Sprint 10 — Assistente Financeiro com IA
 
 > **Especificação:** `PRD.md`, seção 14. Em caso de dúvida, vale o PRD. **Responsáveis:** `agents/README.md`.
 >
@@ -627,35 +627,35 @@
   - [x] 10.12.10 Testar as views e o dashboard: login, POST, 405, mensagens, estados e ausência de chamada ao modelo.
   - [x] 10.12.11 Criar o teste real ativado só por `RUN_LIVE_AI_TESTS=True` e, com autorização do responsável, executá-lo para medir tempo, tokens e custo.
 
-- [ ] **10.13 Testar a segurança e o isolamento entre usuários**
+- [x] **10.13 Testar a segurança e o isolamento entre usuários**
   - **Objetivo:** demonstrar por testes que o agente não acessa dados de outro usuário, mesmo se o modelo tentar.
   - **Arquivos:** `ai/tests.py`.
   - **Dependências:** 10.12.
   - **Resultado esperado:** testes adversariais, com os usuários A e B e dados diferentes.
   - **Critérios de conclusão:** todos os cenários passam; qualquer vazamento é defeito **Crítico** e bloqueia o encerramento da sprint.
-  - [ ] 10.13.1 Simular tool calls com `user_id` forjado para B em execução de A e confirmar que só retornam dados de A.
-  - [ ] 10.13.2 Verificar que todas as funções de `queries.py` e todas as tools ignoram dados de B.
-  - [ ] 10.13.3 Executar análises de A e B em threads simultâneas e confirmar que cada registro contém só dados do próprio dono.
-  - [ ] 10.13.4 Testar, com B autenticado, 404 no detalhe de A e ausência de análises de A na lista e no dashboard.
-  - [ ] 10.13.5 Testar que `user_id` enviado no POST é ignorado.
-  - [ ] 10.13.6 Inserir instruções maliciosas e código HTML em descrições e confirmar que o conteúdo é escapado e que continuam disponíveis só as tools de leitura.
-  - [ ] 10.13.7 Testar que as tools não alteram nenhum registro (contagem e conteúdo iguais antes e depois).
-  - [ ] 10.13.8 Testar que o conteúdo enviado ao modelo não contém nome, e-mail, telefone, `bank_name` nem identificadores internos, e que e-mails e cartões em descrições são removidos.
-  - [ ] 10.13.9 Testar a restrição de análise em andamento e o limite diário por usuário, sem afetar outro usuário.
-  - [ ] 10.13.10 Validar o isolamento no navegador, com o `qa-tester`.
+  - [x] 10.13.1 Simular tool calls com `user_id` forjado para B em execução de A e confirmar que só retornam dados de A.
+  - [x] 10.13.2 Verificar que todas as funções de `queries.py` e todas as tools ignoram dados de B.
+  - [x] 10.13.3 Executar análises de A e B em threads simultâneas e confirmar que cada registro contém só dados do próprio dono.
+  - [x] 10.13.4 Testar, com B autenticado, 404 no detalhe de A e ausência de análises de A na lista e no dashboard.
+  - [x] 10.13.5 Testar que `user_id` enviado no POST é ignorado.
+  - [x] 10.13.6 Inserir instruções maliciosas e código HTML em descrições e confirmar que o conteúdo é escapado e que continuam disponíveis só as tools de leitura.
+  - [x] 10.13.7 Testar que as tools não alteram nenhum registro (contagem e conteúdo iguais antes e depois).
+  - [x] 10.13.8 Testar que o conteúdo enviado ao modelo não contém nome, e-mail, telefone, `bank_name` nem identificadores internos, e que e-mails e cartões em descrições são removidos.
+  - [x] 10.13.9 Testar a restrição de análise em andamento e o limite diário por usuário, sem afetar outro usuário.
+  - [x] 10.13.10 Validar o isolamento no navegador, com o `qa-tester`.
 
-- [ ] **10.14 Documentar a implementação**
+- [x] **10.14 Documentar a implementação**
   - **Objetivo:** deixar a funcionalidade operável por quem não participou da implementação.
   - **Arquivos:** `docs/ia.md`, `docs/README.md`, `docs/setup.md`, `docs/estrutura.md`, `README.md`, `CLAUDE.md`, `.env.example`.
   - **Dependências:** 10.13.
   - **Resultado esperado:** documentação técnica e de configuração atualizada, com a imagem Docker validada.
   - **Critérios de conclusão:** um novo desenvolvedor configura o Assistente seguindo só os documentos; a imagem sobe com e sem a chave; todas as tarefas desta sprint estão marcadas.
-  - [ ] 10.14.1 Criar `docs/ia.md` com arquitetura, tools, fluxo, códigos de erro, limites e como trocar o modelo.
-  - [ ] 10.14.2 Registrar em `docs/ia.md` as respostas da tarefa 10.1.5 e o custo e o tempo medidos em 10.12.11.
-  - [ ] 10.14.3 Atualizar `docs/setup.md`, `docs/estrutura.md`, `docs/README.md` e o `README.md`.
-  - [ ] 10.14.4 Reconstruir a imagem Docker com as novas dependências e validar o sistema com e sem `OPENAI_API_KEY`.
-  - [ ] 10.14.5 Atualizar o `CLAUDE.md` com a app `ai`, a exceção de dependências e o local real das tarefas (itens I-03 e I-09 do PRD).
-  - [ ] 10.14.6 Corrigir as referências antigas a "Sprint 10" (Docker) em `agents/devops-docker.md` e a "PRD, seção 13" em `agents/` e `docs/`.
+  - [x] 10.14.1 Criar `docs/ia.md` com arquitetura, tools, fluxo, códigos de erro, limites e como trocar o modelo.
+  - [x] 10.14.2 Registrar em `docs/ia.md` as respostas da tarefa 10.1.5 e o custo e o tempo medidos em 10.12.11.
+  - [x] 10.14.3 Atualizar `docs/setup.md`, `docs/estrutura.md`, `docs/README.md` e o `README.md`.
+  - [x] 10.14.4 Reconstruir a imagem Docker com as novas dependências e validar o sistema com e sem `OPENAI_API_KEY`.
+  - [x] 10.14.5 Atualizar o `CLAUDE.md` com a app `ai`, a exceção de dependências e o local real das tarefas (itens I-03 e I-09 do PRD).
+  - [x] 10.14.6 Corrigir as referências antigas a "Sprint 10" (Docker) em `agents/devops-docker.md` e a "PRD, seção 13" em `agents/` e `docs/`.
 
 ---
 
@@ -678,3 +678,35 @@
   - [x] 11.3.1 Criar `.dockerignore` (venv, `__pycache__`, `.git`, `db.sqlite3`).
   - [x] 11.3.2 Testar `docker compose up --build` do zero.
   - [x] 11.3.3 Atualizar o `README.md` com instruções de uso do Docker.
+
+---
+
+### [x] Sprint 12 — Correções da validação final
+
+> Problemas encontrados na validação da imagem Docker (tarefa 10.14.4). **Responsável:** `devops-docker`.
+
+- [x] **12.1 `manage.py check` falha na imagem fora do Compose**
+  - **Problema:** `docker run --rm -e SECRET_KEY=x finanpy-web python manage.py check` termina com `OperationalError: unable to open database file`. Sem `DATABASE_PATH`, o banco cai em `/app/db.sqlite3`, mas `/app` pertence ao root e o processo roda como `finanpy`; o `JSONField` da app `ai` faz o check abrir conexão com o banco. Pelo Compose (com `DATABASE_PATH=/data/db.sqlite3`) funciona.
+  - **Arquivos:** `Dockerfile`, `README.md`, `docs/setup.md`.
+  - **Critérios de conclusão:** `manage.py check` passa na imagem com e sem o Compose; `docker compose up --build` continua funcionando com os dados persistidos no volume.
+  - [x] 12.1.1 Definir `ENV DATABASE_PATH=/data/db.sqlite3` no `Dockerfile`, garantindo que `/data` exista e pertença ao usuário `finanpy`.
+  - [x] 12.1.2 Reconstruir a imagem e validar `manage.py check` com `docker run` (sem Compose) e com `docker compose run --rm web`.
+  - [x] 12.1.3 Documentar no `README.md` e no `docs/setup.md` que, após atualizar o projeto, `docker compose up --build` aplica as migrations (incluindo a da app `ai`) e que, sem `OPENAI_API_KEY`, o Assistente aparece como indisponível.
+
+---
+
+### [x] Sprint 13 — Pendências da revisão final
+
+> Pontos levantados na verificação final após a Sprint 12.
+
+- [x] **13.1 Sincronizar os agentes do Claude Code**
+  - **Problema:** os arquivos carregados pelo Claude Code em `.claude/agents/` estavam desatualizados em relação a `agents/` (Docker como "Sprint 10", tarefas e marcações no `PRD.md` em vez do `TASKS.md`).
+  - **Critérios de conclusão:** os 5 agentes em `.claude/agents/` idênticos aos de `agents/`, com o frontmatter preservado.
+  - [x] 13.1.1 Copiar `ai-langchain.md`, `backend-django.md`, `devops-docker.md`, `frontend-django-tailwind.md` e `qa-tester.md` de `agents/` para `.claude/agents/` (sem copiar o `README.md`, que não é agente).
+  - [x] 13.1.2 Confirmar que não restam referências antigas ("Sprint 10" para Docker, tarefas ou `[x]` no `PRD.md`) em `.claude/agents/`.
+
+- [x] **13.2 Atualizar o container principal**
+  - **Problema:** a stack principal usava a imagem anterior à Sprint 10/12 e o volume `finanpy_db_data` ainda não tinha a migration da app `ai`.
+  - **Critérios de conclusão:** container no ar com a imagem nova, migration `ai.0001_initial` aplicada e dados existentes preservados.
+  - [x] 13.2.1 Executar `docker compose up -d --build` (sem `-v`).
+  - [x] 13.2.2 Confirmar nos logs a migration da app `ai`, `manage.py check` sem problemas e a landing respondendo 200.

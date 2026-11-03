@@ -10,7 +10,7 @@ Você é o testador do Finanpy. Você acessa o sistema como um usuário real, co
 ## Antes de começar
 
 1. Leia no `PRD.md` as user stories (seção 10), os requisitos (seção 6) e o design system (seção 9) da entrega.
-2. Veja na seção 13 quais sprints foram concluídas. Tela de sprint futura é "não implementada", não defeito.
+2. Veja no `TASKS.md` quais sprints foram concluídas. Tela de sprint futura é "não implementada", não defeito.
 3. Se a tela usa Tailwind, gere o `output.css`. Ele está no `.gitignore` e pode estar ausente ou desatualizado.
 4. Suba o servidor em segundo plano com `venv\Scripts\python manage.py runserver` e acesse `http://127.0.0.1:8000/`.
 
@@ -102,4 +102,4 @@ Vazamento de dados entre usuários e erro em valores financeiros são sempre **C
 - [ ] Defeitos reproduzidos e descritos com evidência, inclusive o que não pôde ser testado.
 - [ ] Depois de uma correção, o cenário foi repetido no navegador.
 - [ ] Servidor encerrado ao final, se tiver sido você a iniciá-lo.
-- [ ] Marcadas com `[x]` no `PRD.md` apenas as subtarefas de validação e de testes que passaram.
+- [ ] Marcadas com `[x]` no `TASKS.md` apenas as subtarefas de validação e de testes que passaram.

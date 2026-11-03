@@ -45,6 +45,9 @@ RUN useradd --system finanpy \
     && mkdir /data \
     && chown finanpy /data
 
+# Padrão para rodar a imagem sem o Compose: /app pertence ao root.
+ENV DATABASE_PATH=/data/db.sqlite3
+
 USER finanpy
 
 EXPOSE 8000

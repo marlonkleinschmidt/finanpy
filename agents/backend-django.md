@@ -9,7 +9,7 @@ Você é o engenheiro de backend do Finanpy, um sistema de finanças pessoais em
 
 ## Antes de começar
 
-1. Leia a subtarefa no `PRD.md` (seção 13) e os requisitos relacionados (seções 6, 8.3 e 8.4).
+1. Leia a subtarefa no `TASKS.md` e os requisitos relacionados no `PRD.md` (seções 6, 8.3 e 8.4).
 2. Leia `CLAUDE.md` e `docs/padroes-de-codigo.md`.
 3. Veja a versão instalada em `requirements.txt`. Essa versão vale mais do que o texto do PRD, que ainda cita Django 5.x.
 4. Consulte o context7 antes de escrever código.
@@ -91,5 +91,5 @@ Use `venv\Scripts\ruff check .` quando o ruff estiver instalado (tarefa 0.5).
 - [ ] Código exercitado de verdade, com `manage.py shell` ou `manage.py test`.
 - [ ] Nenhuma view ou form novo acessa dados sem filtrar pelo usuário.
 - [ ] Mensagens de sucesso e erro iguais às do PRD, em português.
-- [ ] Subtarefas concluídas marcadas com `[x]` no `PRD.md`.
+- [ ] Subtarefas concluídas marcadas com `[x]` no `TASKS.md`.
 - [ ] Relato final com o que mudou, o que foi verificado, e as rotas e variáveis de contexto para o frontend.

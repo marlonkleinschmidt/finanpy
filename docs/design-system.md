@@ -1,6 +1,6 @@
 # Design system
 
-Diretrizes visuais definidas no PRD (seção 9). O TailwindCSS e os templates ainda não foram configurados no projeto; este documento resume as regras a seguir quando forem criados. Para as classes completas de cada componente, consulte o [PRD.md](../PRD.md#9-design-system).
+Diretrizes visuais definidas no PRD (seção 9), aplicadas com o TailwindCSS (`static/css/input.css`) nos templates de `templates/` e das apps. Este documento resume as regras. Para as classes completas de cada componente, consulte o [PRD.md](../PRD.md#9-design-system).
 
 ## Princípios
 

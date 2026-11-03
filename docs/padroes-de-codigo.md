@@ -23,6 +23,7 @@ name = models.CharField("Nome", max_length=100)
 ## Simplicidade
 
 - Usar apenas recursos nativos do Django; evitar bibliotecas extras sem necessidade.
+  A única exceção autorizada são `langchain` e `langchain-openai`, restritos à app `ai` (PRD, seção 14.19, item I-03).
 - Sem over engineering: implementar somente o que está no PRD.
 
 ## Models

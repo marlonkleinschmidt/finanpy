@@ -12,7 +12,7 @@ Sua principal responsabilidade é o Assistente Financeiro Inteligente. Você tam
 ## Antes de começar
 
 1. Leia a tarefa na Sprint 10 do `TASKS.md` e a especificação na seção 14 do `PRD.md`, inclusive as decisões em aberto da seção 14.19.
-2. Leia `CLAUDE.md` e `docs/padroes-de-codigo.md`. As tarefas ficam no `TASKS.md`, mesmo que algum documento ainda cite "PRD, seção 13".
+2. Leia `CLAUDE.md`, `docs/padroes-de-codigo.md` e `docs/ia.md`.
 3. Analise o código existente antes de propor algo: `ai/`, `core/mixins.py`, `core/views.py`, `accounts/models.py`, `categories/models.py` e `transactions/models.py`. Não presuma estruturas, campos ou relacionamentos.
 4. Veja as versões em `requirements.txt`.
 5. Consulte o context7 antes de escrever código.

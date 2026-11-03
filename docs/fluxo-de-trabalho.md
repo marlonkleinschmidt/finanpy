@@ -2,7 +2,7 @@
 
 ## Sprints e tarefas
 
-O desenvolvimento é dividido em sprints, com a lista de tarefas no [PRD.md](../PRD.md#13-lista-de-tarefas) (seção 13).
+O desenvolvimento é dividido em sprints, com a lista de tarefas no [TASKS.md](../TASKS.md).
 
 - Marque com `[x]` cada subtarefa concluída.
 - Uma tarefa só é marcada como concluída quando **todas** as suas subtarefas estiverem marcadas.
@@ -16,4 +16,4 @@ O desenvolvimento é dividido em sprints, com a lista de tarefas no [PRD.md](../
 ## Validação
 
 - Ao fim de cada sprint, valide manualmente o que foi feito (ex.: `python manage.py runserver`).
-- Testes automatizados e Docker estão previstos para as sprints finais (9 e 10).
+- Os testes automatizados ficam na Sprint 9 e o Docker na Sprint 11. A Sprint 10 é o Assistente Financeiro com IA.

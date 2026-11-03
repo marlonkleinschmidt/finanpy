@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.utils.formats import date_format
 from django.views.generic import TemplateView
 
+from ai.services import get_dashboard_analysis_state
 from transactions.models import Transaction
 
 
@@ -58,4 +59,5 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['current_month'] = date_format(
             today, 'YEAR_MONTH_FORMAT'
         ).lower()
+        context['analysis_state'] = get_dashboard_analysis_state(user)
         return context

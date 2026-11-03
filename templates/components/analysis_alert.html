@@ -1,0 +1,9 @@
+{# Recebe: alert (severity, title, description e evidence) e, opcionalmente, hide_evidence. Os rótulos evitam que a severidade dependa só da cor. #}
+<div class="min-w-0 rounded-xl border px-4 py-3 text-sm {% if alert.severity == 'critical' %}border-rose-500/30 bg-rose-500/10 text-rose-300{% elif alert.severity == 'warning' %}border-amber-500/30 bg-amber-500/10 text-amber-300{% else %}border-slate-700 bg-slate-800/60 text-slate-300{% endif %}">
+    <p class="text-xs font-medium uppercase tracking-wide">{% if alert.severity == 'critical' %}Crítico{% elif alert.severity == 'warning' %}Atenção{% else %}Informação{% endif %}</p>
+    <p class="mt-1 min-w-0 break-words font-semibold">{{ alert.title }}</p>
+    <p class="mt-1 min-w-0 break-words">{{ alert.description }}</p>
+    {% if not hide_evidence %}
+        {% include 'components/analysis_evidence.html' with evidence=alert.evidence %}
+    {% endif %}
+</div>

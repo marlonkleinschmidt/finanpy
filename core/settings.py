@@ -175,3 +175,30 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+
+# AI assistant
+
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
+AI_MODEL_NAME = os.environ.get('AI_MODEL_NAME', 'gpt-5-mini')
+AI_REASONING_EFFORT = os.environ.get('AI_REASONING_EFFORT', 'low')
+AI_MODEL_TIMEOUT_SECONDS = int(
+    os.environ.get('AI_MODEL_TIMEOUT_SECONDS', '45')
+)
+AI_MODEL_MAX_RETRIES = int(os.environ.get('AI_MODEL_MAX_RETRIES', '1'))
+AI_MAX_OUTPUT_TOKENS = int(os.environ.get('AI_MAX_OUTPUT_TOKENS', '4000'))
+
+AI_ANALYSIS_WINDOW_MONTHS = int(
+    os.environ.get('AI_ANALYSIS_WINDOW_MONTHS', '6')
+)
+AI_ANALYSIS_MIN_TRANSACTIONS = int(
+    os.environ.get('AI_ANALYSIS_MIN_TRANSACTIONS', '5')
+)
+AI_ANALYSIS_DAILY_LIMIT = int(os.environ.get('AI_ANALYSIS_DAILY_LIMIT', '3'))
+AI_ANALYSIS_STALE_DAYS = int(os.environ.get('AI_ANALYSIS_STALE_DAYS', '30'))
+AI_ANALYSIS_PENDING_TIMEOUT_MINUTES = int(
+    os.environ.get('AI_ANALYSIS_PENDING_TIMEOUT_MINUTES', '5')
+)
+AI_RUN_BUDGET_SECONDS = int(os.environ.get('AI_RUN_BUDGET_SECONDS', '120'))
+AI_MAX_MODEL_CALLS = int(os.environ.get('AI_MAX_MODEL_CALLS', '8'))
+AI_MAX_TOOL_CALLS = int(os.environ.get('AI_MAX_TOOL_CALLS', '10'))

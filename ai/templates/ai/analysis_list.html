@@ -1,0 +1,77 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Assistente IA | Finanpy{% endblock %}
+
+{% block content %}
+    {% url 'dashboard' as dashboard_url %}
+    {% include 'components/page_header.html' with title='Assistente IA' %}
+    {% if analyses %}
+        {# Tabela só a partir de xl, como nas demais listas: abaixo disso a sidebar fixa empurra as ações para fora da tela. #}
+        <div class="hidden xl:block overflow-x-auto rounded-2xl border border-slate-700/50">
+            <table class="min-w-full divide-y divide-slate-800 text-sm">
+                <thead>
+                    <tr>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Data</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Período</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Status</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Insight principal</th>
+                        <th scope="col" class="bg-slate-900 text-left text-xs font-semibold uppercase tracking-wide text-slate-400 px-4 py-3">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800">
+                    {% for analysis in analyses %}
+                        <tr class="bg-slate-900/50 hover:bg-slate-800/60 transition">
+                            <td class="px-4 py-3 text-slate-300 whitespace-nowrap tabular-nums">{{ analysis.created_at|date:'d/m/Y' }}</td>
+                            <td class="px-4 py-3 text-slate-300 whitespace-nowrap tabular-nums">{{ analysis.period_start|date:'d/m/Y' }} a {{ analysis.period_end|date:'d/m/Y' }}</td>
+                            <td class="px-4 py-3 text-slate-300 whitespace-nowrap">{% include 'components/analysis_status_badge.html' %}</td>
+                            <td class="px-4 py-3 text-slate-300 max-w-sm truncate" title="{{ analysis.main_insight.title|default:analysis.get_status_display }}">{{ analysis.main_insight.title|default:analysis.get_status_display }}</td>
+                            <td class="px-4 py-3 text-slate-300">
+                                <a href="{% url 'ai:detail' analysis.pk %}" aria-label="Ver análise de {{ analysis.created_at|date:'d/m/Y' }}" class="inline-flex p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950">
+                                    <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="space-y-4 xl:hidden">
+            {% for analysis in analyses %}
+                <article class="bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl shadow-black/20">
+                    <div class="flex items-start justify-between gap-3">
+                        <h2 class="min-w-0 break-words text-sm font-semibold text-slate-100">{{ analysis.main_insight.title|default:analysis.get_status_display }}</h2>
+                        <a href="{% url 'ai:detail' analysis.pk %}" aria-label="Ver análise de {{ analysis.created_at|date:'d/m/Y' }}" class="shrink-0 p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950">
+                            <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <dl class="mt-4 space-y-2 text-sm">
+                        <div class="flex justify-between gap-4">
+                            <dt class="shrink-0 text-slate-400">Data</dt>
+                            <dd class="min-w-0 text-slate-300 tabular-nums">{{ analysis.created_at|date:'d/m/Y' }}</dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="shrink-0 text-slate-400">Período</dt>
+                            <dd class="min-w-0 text-right text-slate-300 tabular-nums">{{ analysis.period_start|date:'d/m/Y' }} a {{ analysis.period_end|date:'d/m/Y' }}</dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="shrink-0 text-slate-400">Status</dt>
+                            <dd class="min-w-0">{% include 'components/analysis_status_badge.html' %}</dd>
+                        </div>
+                    </dl>
+                </article>
+            {% endfor %}
+        </div>
+        {% include 'components/pagination.html' %}
+        <div class="mt-6">
+            {% include 'components/analysis_disclaimer.html' %}
+        </div>
+    {% else %}
+        {% include 'components/empty_state.html' with message='Você ainda não tem análises. Gere a primeira no dashboard para receber dicas sobre suas finanças.' action_url=dashboard_url action_label='Ir para o dashboard' %}
+    {% endif %}
+{% endblock %}

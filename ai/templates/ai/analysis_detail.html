@@ -1,0 +1,85 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Análise | Finanpy{% endblock %}
+
+{% block content %}
+    {% include 'components/page_header.html' with title='Análise financeira' %}
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+        <div class="min-w-0 space-y-1">
+            <div>{% include 'components/analysis_status_badge.html' %}</div>
+            <p class="text-sm text-slate-300 tabular-nums">Período analisado: {{ analysis.period_start|date:'d/m/Y' }} a {{ analysis.period_end|date:'d/m/Y' }}</p>
+            {% if analysis.generated_at %}
+                <p class="text-sm text-slate-300 tabular-nums">Gerada em: {{ analysis.generated_at|date:'d/m/Y' }} às {{ analysis.generated_at|date:'H:i' }}</p>
+            {% else %}
+                <p class="text-sm text-slate-300 tabular-nums">Solicitada em: {{ analysis.created_at|date:'d/m/Y' }} às {{ analysis.created_at|date:'H:i' }}</p>
+            {% endif %}
+        </div>
+        <a href="{% url 'ai:list' %}" class="sm:shrink-0 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-slate-800 text-slate-100 border border-slate-700 hover:bg-slate-700">Voltar ao histórico</a>
+    </div>
+
+    <div class="space-y-6">
+        {% if analysis.status == 'failed' %}
+            <p class="rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 px-4 py-3 text-sm">Não foi possível concluir esta análise.</p>
+        {% elif analysis.status == 'pending' %}
+            <p class="rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 px-4 py-3 text-sm">Esta análise ainda está em andamento.</p>
+        {% else %}
+            {% if stale_notice %}
+                <p class="min-w-0 break-words rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 px-4 py-3 text-sm">{{ stale_notice }}</p>
+            {% endif %}
+
+            {% if analysis.main_insight.title %}
+                <section aria-labelledby="main-insight-title" class="min-w-0 rounded-2xl p-6 bg-gradient-to-br from-violet-600/30 via-indigo-600/20 to-cyan-500/10 border border-violet-500/30">
+                    <h2 id="main-insight-title" class="mb-3 text-sm font-medium text-slate-400 uppercase tracking-wide">Insight principal</h2>
+                    {% include 'components/analysis_item.html' with item=analysis.main_insight highlight=True %}
+                </section>
+            {% endif %}
+
+            {% if analysis.alerts %}
+                <section aria-labelledby="alerts-title" class="min-w-0">
+                    <h2 id="alerts-title" class="mb-4 text-xl font-semibold text-slate-100">Alertas</h2>
+                    <ul class="space-y-3">
+                        {% for alert in analysis.alerts %}
+                            <li class="min-w-0">{% include 'components/analysis_alert.html' %}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endif %}
+
+            {% if analysis.insights %}
+                <section aria-labelledby="insights-title" class="min-w-0">
+                    <h2 id="insights-title" class="mb-4 text-xl font-semibold text-slate-100">Insights</h2>
+                    <ul class="space-y-4">
+                        {% for insight in analysis.insights %}
+                            <li class="min-w-0 bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl shadow-black/20">{% include 'components/analysis_item.html' with item=insight %}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endif %}
+
+            {% if analysis.recommendations %}
+                <section aria-labelledby="recommendations-title" class="min-w-0">
+                    <h2 id="recommendations-title" class="mb-4 text-xl font-semibold text-slate-100">Recomendações</h2>
+                    <ul class="space-y-4">
+                        {% for recommendation in analysis.recommendations %}
+                            <li class="min-w-0 bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl shadow-black/20">{% include 'components/analysis_item.html' with item=recommendation %}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endif %}
+
+            {% if analysis.data_limitations %}
+                <section aria-labelledby="limitations-title" class="min-w-0">
+                    <h2 id="limitations-title" class="mb-4 text-xl font-semibold text-slate-100">Limitações dos dados</h2>
+                    <ul class="list-disc space-y-2 pl-10 bg-slate-900 border border-slate-700/50 rounded-2xl p-6 shadow-xl shadow-black/20 text-sm text-slate-300">
+                        {% for limitation in analysis.data_limitations %}
+                            <li class="min-w-0 break-words">{{ limitation }}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endif %}
+        {% endif %}
+
+        {% include 'components/analysis_disclaimer.html' %}
+    </div>
+{% endblock %}

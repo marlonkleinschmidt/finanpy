@@ -1,0 +1,6 @@
+{# Recebe: item (title, description e evidence) e, opcionalmente, highlight, para o insight principal, e hide_evidence, para o resumo do card. #}
+<p class="min-w-0 break-words font-semibold text-slate-100 {% if highlight %}text-lg{% else %}text-sm{% endif %}">{{ item.title }}</p>
+<p class="mt-1 min-w-0 break-words text-sm text-slate-300">{{ item.description }}</p>
+{% if not hide_evidence %}
+    {% include 'components/analysis_evidence.html' with evidence=item.evidence %}
+{% endif %}

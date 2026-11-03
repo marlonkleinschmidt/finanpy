@@ -1,0 +1,105 @@
+{# Recebe: analysis_state, de get_dashboard_analysis_state. Os avisos e números vêm do serviço. O estado Carregando só existe no navegador (analysis_form.js). #}
+{% with analysis=analysis_state.analysis state=analysis_state.state %}
+    <section aria-labelledby="analysis-card-title" class="min-w-0 space-y-5 mb-6 rounded-2xl p-6 bg-gradient-to-br from-violet-600/30 via-indigo-600/20 to-cyan-500/10 border border-violet-500/30">
+        <div class="min-w-0">
+            <h2 id="analysis-card-title" class="text-xl font-semibold text-slate-100">Assistente financeiro</h2>
+            {% if analysis %}
+                <p class="mt-1 text-sm text-slate-300 tabular-nums">Período analisado: {{ analysis.period_start|date:'d/m/Y' }} a {{ analysis.period_end|date:'d/m/Y' }}</p>
+                {% if analysis.generated_at %}
+                    <p class="text-sm text-slate-300 tabular-nums">Última análise: {{ analysis.generated_at|date:'d/m/Y' }} às {{ analysis.generated_at|date:'H:i' }}</p>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        {% if analysis_state.notices %}
+            <div class="space-y-3">
+                {# O aviso do estado vem primeiro; o segundo, quando existe, é sempre o de análise desatualizada. #}
+                {% for notice in analysis_state.notices %}
+                    {% if state == 'failed' and forloop.first %}
+                        <p class="min-w-0 break-words rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 px-4 py-3 text-sm">{{ notice }}</p>
+                    {% elif state == 'limit_reached' or state == 'stale' or not forloop.first %}
+                        <p class="min-w-0 break-words rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 px-4 py-3 text-sm">{{ notice }}</p>
+                    {% else %}
+                        <p class="min-w-0 break-words rounded-xl border border-slate-700 bg-slate-800/60 text-slate-300 px-4 py-3 text-sm">{{ notice }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if analysis.main_insight.title or analysis.alerts or analysis.recommendations %}
+            {# details é nativo: recolhe com teclado e sem JavaScript. analysis_form.js só lembra a escolha. #}
+            <details id="analysis-content" open class="group min-w-0">
+                <summary class="flex w-fit cursor-pointer list-none items-center gap-2 rounded-lg text-sm font-semibold text-slate-200 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 [&::-webkit-details-marker]:hidden">
+                    <svg aria-hidden="true" class="h-4 w-4 shrink-0 transition-transform group-open:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    <span class="group-open:hidden">Expandir análise</span>
+                    <span class="hidden group-open:inline">Recolher análise</span>
+                </summary>
+
+                <div class="mt-4 min-w-0 space-y-5">
+                    {% if analysis.main_insight.title %}
+                        <div class="min-w-0">
+                            {% include 'components/analysis_item.html' with item=analysis.main_insight highlight=True %}
+                        </div>
+                    {% endif %}
+
+                    {% if analysis.alerts %}
+                        <div class="min-w-0">
+                            <h3 class="text-sm font-medium text-slate-400 uppercase tracking-wide">Alertas</h3>
+                            <ul class="mt-3 space-y-3">
+                                {% for alert in analysis.alerts %}
+                                    <li class="min-w-0">{% include 'components/analysis_alert.html' with hide_evidence=True %}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    {% if analysis.recommendations %}
+                        <div class="min-w-0">
+                            <h3 class="text-sm font-medium text-slate-400 uppercase tracking-wide">Recomendações</h3>
+                            <ul class="mt-3 space-y-3">
+                                {% for recommendation in analysis.recommendations|slice:":3" %}
+                                    <li class="min-w-0 rounded-xl border border-slate-700/50 bg-slate-900/60 px-4 py-3">{% include 'components/analysis_item.html' with item=recommendation hide_evidence=True %}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </details>
+        {% endif %}
+
+        {% if analysis or state == 'failed' or state == 'running' or state == 'limit_reached' %}
+            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                {% if analysis %}
+                    <a href="{% url 'ai:detail' analysis.pk %}" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-slate-800 text-slate-100 border border-slate-700 hover:bg-slate-700">Ver análise completa</a>
+                {% endif %}
+                <a href="{% url 'ai:list' %}" class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 text-slate-300 hover:text-white hover:bg-slate-800">Ver histórico</a>
+            </div>
+        {% endif %}
+
+        {% if analysis_state.can_generate %}
+            <div class="min-w-0">
+                <form id="analysis-form" method="post" action="{% url 'ai:create' %}" data-loading-message="{{ analysis_state.loading_message }}">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full sm:w-auto cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-violet-900/30 hover:opacity-90">{% if analysis %}Gerar nova análise{% else %}Gerar análise{% endif %}</button>
+                </form>
+                {# A região fica no HTML desde o início, e vazia, para o leitor de tela anunciar o texto. #}
+                <div id="analysis-form-status" role="status" class="mt-3 empty:mt-0 text-sm font-medium text-slate-100"></div>
+                <p class="mt-3 text-xs text-slate-400">Ao gerar a análise, seus lançamentos financeiros são enviados à OpenAI para processamento. Nome, e-mail e telefone não são enviados.</p>
+            </div>
+        {% elif state == 'running' or state == 'limit_reached' %}
+            <div class="min-w-0">
+                {# Sem formulário: nestes estados não há o que enviar. #}
+                <button type="button" disabled class="w-full sm:w-auto cursor-not-allowed inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold bg-slate-800 text-slate-500 border border-slate-700 opacity-50">{% if analysis %}Gerar nova análise{% else %}Gerar análise{% endif %}</button>
+                <p class="mt-3 text-xs text-slate-400">Ao gerar a análise, seus lançamentos financeiros são enviados à OpenAI para processamento. Nome, e-mail e telefone não são enviados.</p>
+            </div>
+        {% elif state == 'insufficient_data' %}
+            <div>
+                <a href="{% url 'transactions:create' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-violet-900/30 hover:opacity-90">Nova transação</a>
+            </div>
+        {% endif %}
+
+        {% if analysis %}
+            {% include 'components/analysis_disclaimer.html' %}
+        {% endif %}
+    </section>
+{% endwith %}

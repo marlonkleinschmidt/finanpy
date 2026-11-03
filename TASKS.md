@@ -609,23 +609,23 @@
   - [x] 10.11.8 Definir `{% block title %}` em cada nova página.
   - [x] 10.11.9 Validar no navegador nos três breakpoints e todos os estados, com o `qa-tester`.
 
-- [ ] **10.12 Implementar testes unitários e de integração**
+- [x] **10.12 Implementar testes unitários e de integração**
   - **Objetivo:** verificar a funcionalidade sem custo, sem rede e sem depender de respostas variáveis do modelo.
   - **Arquivos:** `ai/tests.py` e `core/tests.py`.
   - **Dependências:** 10.11.
   - **Resultado esperado:** suíte da app `ai` com modelo falso, mais um teste real opcional.
   - **Critérios de conclusão:** `manage.py test` passa sem chave e sem internet; cobertura da app `ai` de pelo menos 80%; `ruff check .` sem apontamentos.
-  - [ ] 10.12.1 Criar a subclasse de `GenericFakeChatModel` com `bind_tools`, instanciando o iterador em cada teste.
-  - [ ] 10.12.2 Testar cada função de `queries.py` com valores calculados à mão, incluindo datas futuras, mês parcial e meses sem movimento.
-  - [ ] 10.12.3 Testar que `get_accounts_overview` confere com `Account.current_balance`.
-  - [ ] 10.12.4 Testar com `assertNumQueries` que o custo das consultas não cresce com o volume de dados.
-  - [ ] 10.12.5 Testar as tools: parâmetros válidos, fora do período e acima dos limites.
-  - [ ] 10.12.6 Testar o agente com `TransactionTestCase`: chamada de tool, saída estruturada e nova tentativa após saída inválida.
-  - [ ] 10.12.7 Testar os limites de chamadas e o prazo total.
-  - [ ] 10.12.8 Testar a validação de evidências: válida, inventada, descarte e `main_insight` rejeitado.
-  - [ ] 10.12.9 Testar `generate_analysis` em cada resultado, e cada `error_code` com exceções simuladas.
-  - [ ] 10.12.10 Testar as views e o dashboard: login, POST, 405, mensagens, estados e ausência de chamada ao modelo.
-  - [ ] 10.12.11 Criar o teste real ativado só por `RUN_LIVE_AI_TESTS=True` e, com autorização do responsável, executá-lo para medir tempo, tokens e custo.
+  - [x] 10.12.1 Criar a subclasse de `GenericFakeChatModel` com `bind_tools`, instanciando o iterador em cada teste.
+  - [x] 10.12.2 Testar cada função de `queries.py` com valores calculados à mão, incluindo datas futuras, mês parcial e meses sem movimento.
+  - [x] 10.12.3 Testar que `get_accounts_overview` confere com `Account.current_balance`.
+  - [x] 10.12.4 Testar com `assertNumQueries` que o custo das consultas não cresce com o volume de dados.
+  - [x] 10.12.5 Testar as tools: parâmetros válidos, fora do período e acima dos limites.
+  - [x] 10.12.6 Testar o agente com `TransactionTestCase`: chamada de tool, saída estruturada e nova tentativa após saída inválida.
+  - [x] 10.12.7 Testar os limites de chamadas e o prazo total.
+  - [x] 10.12.8 Testar a validação de evidências: válida, inventada, descarte e `main_insight` rejeitado.
+  - [x] 10.12.9 Testar `generate_analysis` em cada resultado, e cada `error_code` com exceções simuladas.
+  - [x] 10.12.10 Testar as views e o dashboard: login, POST, 405, mensagens, estados e ausência de chamada ao modelo.
+  - [x] 10.12.11 Criar o teste real ativado só por `RUN_LIVE_AI_TESTS=True` e, com autorização do responsável, executá-lo para medir tempo, tokens e custo.
 
 - [ ] **10.13 Testar a segurança e o isolamento entre usuários**
   - **Objetivo:** demonstrar por testes que o agente não acessa dados de outro usuário, mesmo se o modelo tentar.

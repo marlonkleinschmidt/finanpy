@@ -1,12 +1,16 @@
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, time, timedelta
 from decimal import Decimal
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 
 from accounts.models import Account
+from ai.context import calculate_analysis_period
+from ai.models import FinancialAnalysis
+from ai.services import AnalysisState
 from categories.models import Category
 from transactions.models import Transaction
 
@@ -502,3 +506,482 @@ class DashboardEmptyStateTests(DashboardTestCase):
         self.assertEqual(response.context['month_income'], Decimal('0.00'))
         self.assertEqual(response.context['month_expense'], Decimal('0.00'))
         self.assertEqual(response.context['month_result'], Decimal('0.00'))
+
+
+# Card do assistente (PRD 14.15) -------------------------------------------
+
+AI_TEST_SETTINGS = {
+    'OPENAI_API_KEY': 'chave-de-teste-nao-usada',
+    'AI_ANALYSIS_WINDOW_MONTHS': 6,
+    'AI_ANALYSIS_MIN_TRANSACTIONS': 5,
+    'AI_ANALYSIS_DAILY_LIMIT': 3,
+    'AI_ANALYSIS_STALE_DAYS': 30,
+    'AI_ANALYSIS_PENDING_TIMEOUT_MINUTES': 5,
+    'AI_RUN_BUDGET_SECONDS': 120,
+}
+
+CARD_TITLE = 'Assistente financeiro'
+NO_ANALYSIS_TEXT = (
+    'Você ainda não tem análises. Gere a primeira para receber dicas sobre '
+    'suas finanças.'
+)
+RUNNING_TEXT = 'Há uma análise em andamento. Atualize a página em instantes.'
+FAILED_TEXT = 'Não foi possível concluir a última análise.'
+STALE_TEXT = (
+    'Esta análise tem mais de 30 dias. Gere uma nova para refletir seus '
+    'dados atuais.'
+)
+LIMIT_TEXT = (
+    'Você atingiu o limite de análises de hoje. Tente novamente amanhã.'
+)
+INSUFFICIENT_TEXT = 'Registre pelo menos 5 transações para gerar uma análise.'
+DISABLED_TEXT = 'O assistente não está disponível no momento.'
+LOADING_TEXT = 'Gerando análise... isso pode levar até 2 minutos.'
+DISCLAIMER_TEXT = (
+    'Conteúdo gerado por inteligência artificial, com caráter educativo, a '
+    'partir dos seus lançamentos. Pode conter erros e não substitui '
+    'orientação profissional nem constitui recomendação de investimento.'
+)
+OPENAI_NOTICE_TEXT = (
+    'Ao gerar a análise, seus lançamentos financeiros são enviados à OpenAI '
+    'para processamento. Nome, e-mail e telefone não são enviados.'
+)
+GENERATE_FORM = 'id="analysis-form"'
+
+
+def analysis_item(title):
+    return {
+        'title': title,
+        'description': f'Descrição de {title}.',
+        'evidence': [{
+            'label': 'Entradas',
+            'value': '3000.00',
+            'source_tool': 'get_financial_summary',
+        }],
+    }
+
+
+def create_analysis(user, status=FinancialAnalysis.Status.SUCCESS, **fields):
+    period_start, period_end = calculate_analysis_period()
+    if status == FinancialAnalysis.Status.SUCCESS:
+        fields.setdefault('generated_at', timezone.now())
+        fields.setdefault('main_insight', analysis_item('Insight principal'))
+    return FinancialAnalysis.objects.create(
+        user=user,
+        status=status,
+        period_start=period_start,
+        period_end=period_end,
+        model_name='modelo-falso',
+        prompt_version='1',
+        **fields,
+    )
+
+
+def move_analysis(analysis, moment, generated=True):
+    """Muda created_at (e generated_at) direto no banco."""
+    fields = {'created_at': moment}
+    if generated:
+        fields['generated_at'] = moment
+    FinancialAnalysis.objects.filter(pk=analysis.pk).update(**fields)
+
+
+class AgentNotCalledMixin:
+    """Falha o teste se o dashboard chegar ao agente ou ao serviço."""
+
+    def setUp(self):
+        super().setUp()
+        self.agent_mocks = []
+        for target in (
+            'ai.agent.build_chat_model',
+            'ai.agent.run_agent',
+            'ai.services.generate_analysis',
+            'ai.views.generate_analysis',
+        ):
+            patcher = patch(target)
+            self.agent_mocks.append(patcher.start())
+            self.addCleanup(patcher.stop)
+
+    def tearDown(self):
+        for mocked in self.agent_mocks:
+            mocked.assert_not_called()
+        super().tearDown()
+
+
+@override_settings(**AI_TEST_SETTINGS)
+class DashboardAnalysisCardTests(AgentNotCalledMixin, TestCase):
+    """Cada estado do card, com a data real: os limites diários usam o
+    relógio do banco, e congelar só localdate os desencontraria.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.owner = User.objects.create_user(
+            email='card@finanpy.test',
+            password='SenhaForte!123',
+            first_name='Dona',
+        )
+        cls.other_user = User.objects.create_user(
+            email='card.outro@finanpy.test',
+            password='SenhaForte!123',
+        )
+        cls.account = create_account(cls.owner, 'Banco Alfa', '1000.00')
+        cls.income_category = create_category(
+            cls.owner, Category.CategoryType.INCOME, 'Salário'
+        )
+        cls.expense_category = create_category(
+            cls.owner, Category.CategoryType.EXPENSE, 'Mercado'
+        )
+        cls.dashboard_url = reverse('dashboard')
+
+    def setUp(self):
+        super().setUp()
+        self.client.force_login(self.owner)
+
+    def create_transactions(self, count):
+        today = timezone.localdate()
+        for _ in range(count):
+            create_transaction(
+                self.account, self.expense_category, '10.00', today
+            )
+
+    def get_card(self, expected_state):
+        response = self.client.get(self.dashboard_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'components/analysis_card.html')
+        state = response.context['analysis_state']
+        self.assertEqual(state['state'], expected_state)
+        self.assertContains(response, CARD_TITLE)
+        return response, state
+
+    def test_context_has_the_documented_keys(self):
+        self.create_transactions(5)
+
+        response, state = self.get_card(AnalysisState.NO_ANALYSIS)
+
+        self.assertEqual(
+            set(state),
+            {
+                'state',
+                'analysis',
+                'is_stale',
+                'notices',
+                'can_generate',
+                'loading_message',
+            },
+        )
+
+    def test_no_analysis(self):
+        self.create_transactions(5)
+
+        response, state = self.get_card(AnalysisState.NO_ANALYSIS)
+
+        self.assertIsNone(state['analysis'])
+        self.assertEqual(state['notices'], [NO_ANALYSIS_TEXT])
+        self.assertTrue(state['can_generate'])
+        self.assertContains(response, NO_ANALYSIS_TEXT)
+        self.assertContains(response, GENERATE_FORM)
+        self.assertContains(response, reverse('ai:create'))
+        self.assertContains(response, 'Gerar análise')
+        self.assertContains(response, OPENAI_NOTICE_TEXT)
+        self.assertNotContains(response, 'Ver análise completa')
+
+    def test_with_analysis(self):
+        self.create_transactions(5)
+        yesterday = timezone.localdate() - timedelta(days=1)
+        generated_at = timezone.make_aware(
+            datetime.combine(yesterday, time(14, 30))
+        )
+        analysis = create_analysis(
+            self.owner,
+            alerts=[{
+                **analysis_item('Alerta crítico'),
+                'severity': 'critical',
+            }],
+            recommendations=[
+                analysis_item(f'Recomendação {number}')
+                for number in (1, 2, 3, 4)
+            ],
+        )
+        move_analysis(analysis, generated_at)
+        create_analysis(
+            self.other_user,
+            main_insight=analysis_item('Insight do outro'),
+        )
+        period_start, period_end = calculate_analysis_period()
+
+        response, state = self.get_card(AnalysisState.WITH_ANALYSIS)
+
+        self.assertEqual(state['analysis'], analysis)
+        self.assertEqual(state['notices'], [])
+        self.assertTrue(state['can_generate'])
+        self.assertContains(
+            response,
+            f'Período analisado: {period_start:%d/%m/%Y} a '
+            f'{period_end:%d/%m/%Y}',
+        )
+        self.assertContains(
+            response, f'Última análise: {yesterday:%d/%m/%Y} às 14:30'
+        )
+        self.assertContains(response, 'Insight principal')
+        self.assertContains(response, 'Alerta crítico')
+        # Até 3 recomendações no card.
+        self.assertContains(response, 'Recomendação 3')
+        self.assertNotContains(response, 'Recomendação 4')
+        self.assertContains(response, 'Ver análise completa')
+        self.assertContains(
+            response, reverse('ai:detail', args=[analysis.pk])
+        )
+        self.assertContains(response, 'Ver histórico')
+        self.assertContains(response, 'Gerar nova análise')
+        self.assertContains(response, DISCLAIMER_TEXT)
+        self.assertNotContains(response, 'Insight do outro')
+
+    def test_loading_message_is_ready_for_the_browser(self):
+        self.create_transactions(5)
+
+        response, state = self.get_card(AnalysisState.NO_ANALYSIS)
+
+        # O estado Carregando é do navegador: o servidor entrega o texto.
+        self.assertEqual(state['loading_message'], LOADING_TEXT)
+        self.assertContains(
+            response, f'data-loading-message="{LOADING_TEXT}"'
+        )
+        self.assertContains(response, 'js/analysis_form.js')
+
+    @override_settings(AI_RUN_BUDGET_SECONDS=150)
+    def test_loading_message_follows_the_settings(self):
+        self.create_transactions(5)
+
+        response, state = self.get_card(AnalysisState.NO_ANALYSIS)
+
+        # 150 s arredondados para cima: 3 minutos.
+        self.assertEqual(
+            state['loading_message'],
+            'Gerando análise... isso pode levar até 3 minutos.',
+        )
+
+    def test_running_keeps_the_last_valid_analysis(self):
+        self.create_transactions(5)
+        valid = create_analysis(self.owner)
+        move_analysis(valid, timezone.now() - timedelta(days=2))
+        create_analysis(self.owner, status=FinancialAnalysis.Status.PENDING)
+
+        response, state = self.get_card(AnalysisState.RUNNING)
+
+        self.assertEqual(state['analysis'], valid)
+        self.assertFalse(state['can_generate'])
+        self.assertEqual(state['notices'], [RUNNING_TEXT])
+        self.assertContains(response, RUNNING_TEXT)
+        self.assertContains(response, 'Insight principal')
+        self.assertNotContains(response, GENERATE_FORM)
+        self.assertContains(response, 'type="button" disabled')
+
+    def test_old_pending_is_not_running(self):
+        self.create_transactions(5)
+        pending = create_analysis(
+            self.owner, status=FinancialAnalysis.Status.PENDING
+        )
+        move_analysis(
+            pending, timezone.now() - timedelta(days=2), generated=False
+        )
+
+        response, state = self.get_card(AnalysisState.NO_ANALYSIS)
+
+        # Ler o dashboard não grava: quem encerra é generate_analysis.
+        pending.refresh_from_db()
+        self.assertEqual(pending.status, FinancialAnalysis.Status.PENDING)
+
+    def test_failure_keeps_the_last_valid_analysis(self):
+        self.create_transactions(5)
+        valid = create_analysis(self.owner)
+        move_analysis(valid, timezone.now() - timedelta(days=2))
+        create_analysis(
+            self.owner,
+            status=FinancialAnalysis.Status.FAILED,
+            error_code=FinancialAnalysis.ErrorCode.TIMEOUT,
+        )
+
+        response, state = self.get_card(AnalysisState.FAILED)
+
+        self.assertEqual(state['analysis'], valid)
+        self.assertTrue(state['can_generate'])
+        self.assertEqual(state['notices'], [FAILED_TEXT])
+        self.assertContains(response, FAILED_TEXT)
+        self.assertContains(response, 'Insight principal')
+        self.assertContains(response, GENERATE_FORM)
+        # Detalhes técnicos nunca aparecem.
+        self.assertNotContains(response, 'timeout')
+        self.assertNotContains(response, 'Tempo esgotado')
+
+    def test_failure_older_than_the_valid_analysis_is_ignored(self):
+        self.create_transactions(5)
+        failure = create_analysis(
+            self.owner, status=FinancialAnalysis.Status.FAILED
+        )
+        move_analysis(
+            failure, timezone.now() - timedelta(days=2), generated=False
+        )
+        create_analysis(self.owner)
+
+        self.get_card(AnalysisState.WITH_ANALYSIS)
+
+    def test_stale_analysis(self):
+        self.create_transactions(5)
+        analysis = create_analysis(self.owner)
+        move_analysis(analysis, timezone.now() - timedelta(days=31))
+
+        response, state = self.get_card(AnalysisState.STALE)
+
+        self.assertTrue(state['is_stale'])
+        self.assertTrue(state['can_generate'])
+        self.assertEqual(state['notices'], [STALE_TEXT])
+        self.assertContains(response, STALE_TEXT)
+        self.assertContains(response, 'Insight principal')
+        self.assertContains(response, 'Gerar nova análise')
+
+    def test_analysis_of_29_days_is_not_stale(self):
+        self.create_transactions(5)
+        analysis = create_analysis(self.owner)
+        move_analysis(analysis, timezone.now() - timedelta(days=29))
+
+        response, state = self.get_card(AnalysisState.WITH_ANALYSIS)
+
+        self.assertFalse(state['is_stale'])
+        self.assertNotContains(response, 'mais de 30 dias')
+
+    def test_limit_reached(self):
+        self.create_transactions(5)
+        for _ in range(3):
+            create_analysis(
+                self.owner, status=FinancialAnalysis.Status.FAILED
+            )
+
+        response, state = self.get_card(AnalysisState.LIMIT_REACHED)
+
+        self.assertFalse(state['can_generate'])
+        self.assertEqual(state['notices'], [LIMIT_TEXT])
+        self.assertContains(response, LIMIT_TEXT)
+        self.assertNotContains(response, GENERATE_FORM)
+        self.assertContains(response, 'type="button" disabled')
+
+    def test_limit_with_a_stale_analysis_keeps_both_notices(self):
+        self.create_transactions(5)
+        analysis = create_analysis(self.owner)
+        move_analysis(analysis, timezone.now() - timedelta(days=40))
+        for _ in range(3):
+            create_analysis(
+                self.owner, status=FinancialAnalysis.Status.FAILED
+            )
+
+        response, state = self.get_card(AnalysisState.LIMIT_REACHED)
+
+        # Sem botão, o aviso de desatualizada não convida a gerar.
+        self.assertEqual(
+            state['notices'],
+            [LIMIT_TEXT, 'Esta análise tem mais de 30 dias.'],
+        )
+        self.assertNotContains(response, GENERATE_FORM)
+
+    def test_insufficient_data(self):
+        self.create_transactions(4)
+
+        response, state = self.get_card(AnalysisState.INSUFFICIENT_DATA)
+
+        self.assertFalse(state['can_generate'])
+        self.assertEqual(state['notices'], [INSUFFICIENT_TEXT])
+        self.assertContains(response, INSUFFICIENT_TEXT)
+        self.assertNotContains(response, GENERATE_FORM)
+        # Cabeçalho do dashboard e link do card.
+        self.assertContains(response, 'Nova transação', count=2)
+
+    @override_settings(AI_ANALYSIS_MIN_TRANSACTIONS=7)
+    def test_insufficient_data_reads_the_minimum_from_settings(self):
+        self.create_transactions(6)
+
+        response, _ = self.get_card(AnalysisState.INSUFFICIENT_DATA)
+
+        self.assertContains(
+            response,
+            'Registre pelo menos 7 transações para gerar uma análise.',
+        )
+
+    @override_settings(OPENAI_API_KEY='')
+    def test_disabled_without_key(self):
+        self.create_transactions(5)
+        create_analysis(self.owner)
+
+        response, state = self.get_card(AnalysisState.DISABLED)
+
+        self.assertFalse(state['can_generate'])
+        self.assertEqual(state['notices'], [DISABLED_TEXT])
+        self.assertContains(response, DISABLED_TEXT)
+        self.assertNotContains(response, GENERATE_FORM)
+        self.assertNotContains(response, OPENAI_NOTICE_TEXT)
+        # O restante do dashboard não muda: 1000,00 - 5 x 10,00.
+        self.assertEqual(response.context['total_balance'], Decimal('950.00'))
+        self.assertEqual(response.context['month_expense'], Decimal('50.00'))
+        self.assertContains(response, 'R$ 950,00')
+
+    def test_other_user_analyses_do_not_change_the_state(self):
+        self.create_transactions(5)
+        for _ in range(3):
+            create_analysis(
+                self.other_user, status=FinancialAnalysis.Status.FAILED
+            )
+        create_analysis(
+            self.other_user, status=FinancialAnalysis.Status.PENDING
+        )
+
+        _, state = self.get_card(AnalysisState.NO_ANALYSIS)
+
+        self.assertIsNone(state['analysis'])
+
+
+@override_settings(**AI_TEST_SETTINGS)
+class DashboardKpiWithAnalysisTests(AgentNotCalledMixin, DashboardKpiTests):
+    """Os mesmos KPIs de DashboardKpiTests, agora com análises gravadas.
+
+    O card não pode alterar nenhum cálculo do dashboard (PRD 14.15).
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        create_analysis(cls.owner)
+        create_analysis(cls.owner, status=FinancialAnalysis.Status.FAILED)
+        create_analysis(cls.owner, status=FinancialAnalysis.Status.PENDING)
+
+    def test_context_still_has_the_analysis_state(self):
+        response = self.get_dashboard()
+
+        self.assertIn('analysis_state', response.context)
+        self.assertContains(response, CARD_TITLE)
+
+
+class DashboardDoesNotCallTheModelTests(AgentNotCalledMixin, TestCase):
+    @override_settings(**AI_TEST_SETTINGS)
+    def test_every_state_loads_without_the_model(self):
+        user = User.objects.create_user(
+            email='sem.modelo@finanpy.test',
+            password='SenhaForte!123',
+        )
+        account = create_account(user)
+        category = create_category(
+            user, Category.CategoryType.EXPENSE, 'Mercado'
+        )
+        self.client.force_login(user)
+        url = reverse('dashboard')
+
+        # Sem dados, com dados, com análise e em andamento.
+        self.assertEqual(self.client.get(url).status_code, 200)
+        for _ in range(5):
+            create_transaction(
+                account, category, '1.00', timezone.localdate()
+            )
+        self.assertEqual(self.client.get(url).status_code, 200)
+        create_analysis(user)
+        self.assertEqual(self.client.get(url).status_code, 200)
+        create_analysis(user, status=FinancialAnalysis.Status.PENDING)
+        self.assertEqual(self.client.get(url).status_code, 200)
+        # tearDown confere que nada chegou ao agente.
